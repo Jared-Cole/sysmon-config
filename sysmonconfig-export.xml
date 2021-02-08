@@ -80,6 +80,111 @@
 			code signatures to validate, but Sysmon does not support that. Look into AppLocker/WindowsDeviceGuard for whitelisting support. -->
 
 		<!--DATA: UtcTime, ProcessGuid, ProcessID, Image, FileVersion, Description, Product, Company, CommandLine, CurrentDirectory, User, LogonGuid, LogonId, TerminalSessionId, IntegrityLevel, Hashes, ParentProcessGuid, ParentProcessId, ParentImage, ParentCommandLine, RuleName-->
+		<ProcessCreate onmatch="include">
+			<!--MITRE TACTIC: Defense Evasion-->
+			<ParentImage name="Alert=Unknown Process Execution" condition="contains">unknown process</ParentImage>
+			<Image name="Alert=Unknown Process Execution" condition="contains">unknown process</Image>
+			<Image condition="image" name="Technique=Disabling Security Tools,Tactic=Defense Evasion,MitreRef=1089">PsKill.exe</Image>
+			<Image condition="image" name="Technique=Disabling Security Tools,Tactic=Defense Evasion,MitreRef=1089">MpCmdRun.exe</Image>
+			<CommandLine name="MitreRef=T1070,Technique=Indicator Removal on Host,Tactic=Defense Evasion,Alert=Eventlog Removal Detected" condition="contains">wevutil cl</CommandLine>
+			<Image name="MitreRef=T1070,Technique=Indicator Removal on Host,Tactic=Defense Evasion" condition="image">wevutil.exe</Image>
+			<Image name="MitreRef=T1170,Technique=MSHTA,Tactic=Defense Evasion/Execution,Alert=MSHTA Execution" condition="image">mshta.exe</Image>
+			<ParentImage name="MitreRef=T1170,Technique=MSHTA,Tactic=Defense Evasion/Execution,Alert=MSHTA Execution" condition="image">mshta.exe</ParentImage>
+			<CommandLine name="MitreRef=T1118,Technique=InstallUtil,Tactic=Defense Evasion/Execution,Alert=InstallUtil" condition="contains">/logfile= /LogToConsole=false /U</CommandLine>
+			<!--MITRE TACTIC: Discovery-->
+			<CommandLine name="MitreRef=T1087,Technique=Account Discovery,Tactic=Discovery,Alert=NET.EXE Discovery" condition="contains">net user</CommandLine>
+			<CommandLine name="MitreRef=T1087,Technique=Account Discovery,Tactic=Discovery,Alert=NET.EXE Discovery" condition="contains">net  user</CommandLine>
+			<CommandLine name="MitreRef=T1087,Technique=Account Discovery,Tactic=Discovery,Alert=NET.EXE Discovery" condition="contains">net.exe user</CommandLine>
+			<CommandLine name="MitreRef=T1087,Technique=Account Discovery,Tactic=Discovery,Alert=NET.EXE Discovery" condition="contains">net.exe  user</CommandLine>
+			<CommandLine name="MitreRef=T1087,Technique=Account Discovery,Tactic=Discovery,Alert=NET.EXE Discovery" condition="contains">net1 user</CommandLine>
+			<CommandLine name="MitreRef=T1087,Technique=Account Discovery,Tactic=Discovery,Alert=NET.EXE Discovery" condition="contains">net1  user</CommandLine>
+			<CommandLine name="MitreRef=T1087,Technique=Account Discovery,Tactic=Discovery,Alert=NET.EXE Discovery" condition="contains">net1.exe user</CommandLine>
+			<CommandLine name="MitreRef=T1087,Technique=Account Discovery,Tactic=Discovery,Alert=NET.EXE Discovery" condition="contains">net1.exe  user</CommandLine>
+			<CommandLine name="MitreRef=T1087,Technique=Account Discovery,Tactic=Discovery,Alert=NET.EXE Discovery" condition="contains">net localgroup</CommandLine>
+			<CommandLine name="MitreRef=T1087,Technique=Account Discovery,Tactic=Discovery,Alert=NET.EXE Discovery" condition="contains">net  localgroup</CommandLine>
+			<CommandLine name="MitreRef=T1087,Technique=Account Discovery,Tactic=Discovery,Alert=NET.EXE Discovery" condition="contains">net.exe localgroup</CommandLine>
+			<CommandLine name="MitreRef=T1087,Technique=Account Discovery,Tactic=Discovery,Alert=NET.EXE Discovery" condition="contains">net.exe  localgroup</CommandLine>
+			<CommandLine name="MitreRef=T1087,Technique=Account Discovery,Tactic=Discovery,Alert=NET.EXE Discovery" condition="contains">net1 localgroup</CommandLine>
+			<CommandLine name="MitreRef=T1087,Technique=Account Discovery,Tactic=Discovery,Alert=NET.EXE Discovery" condition="contains">net1  localgroup</CommandLine>
+			<CommandLine name="MitreRef=T1087,Technique=Account Discovery,Tactic=Discovery,Alert=NET.EXE Discovery" condition="contains">net group</CommandLine>
+			<CommandLine name="MitreRef=T1087,Technique=Account Discovery,Tactic=Discovery,Alert=NET.EXE Discovery" condition="contains">net  group</CommandLine>
+			<CommandLine name="MitreRef=T1087,Technique=Account Discovery,Tactic=Discovery,Alert=NET.EXE Discovery" condition="contains">net group</CommandLine>
+			<CommandLine name="MitreRef=T1087,Technique=Account Discovery,Tactic=Discovery,Alert=NET.EXE Discovery" condition="contains">net  group</CommandLine>
+			<CommandLine name="MitreRef=T1087,Technique=Account Discovery,Tactic=Discovery,Alert=NET.EXE Discovery" condition="contains">net.exe group</CommandLine>
+			<CommandLine name="MitreRef=T1087,Technique=Account Discovery,Tactic=Discovery,Alert=NET.EXE Discovery" condition="contains">net.exe  group</CommandLine>
+			<CommandLine name="MitreRef=T1087,Technique=Account Discovery,Tactic=Discovery,Alert=NET.EXE Discovery" condition="contains">net group</CommandLine>
+			<CommandLine name="MitreRef=T1087,Technique=Account Discovery,Tactic=Discovery,Alert=NET.EXE Discovery" condition="contains">net  group</CommandLine>
+			<CommandLine name="MitreRef=T1087,Technique=Account Discovery,Tactic=Discovery,Alert=NET.EXE Discovery" condition="contains">net.exe group</CommandLine>
+			<CommandLine name="MitreRef=T1087,Technique=Account Discovery,Tactic=Discovery,Alert=NET.EXE Discovery" condition="contains">net.exe  group</CommandLine>
+			<CommandLine name="MitreRef=T1087,Technique=Account Discovery,Tactic=Discovery,Alert=NET.EXE Discovery" condition="contains">net1.exe group</CommandLine>
+			<CommandLine name="MitreRef=T1087,Technique=Account Discovery,Tactic=Discovery,Alert=NET.EXE Discovery" condition="begin with">net1.exe  group</CommandLine>
+			<CommandLine name="MitreRef=T1136,Technique=Create Account,Tactic=Persistence,Alert=Account Creation via command line,Alert=Account Creation" condition="begin with">dsadd </CommandLine>
+			<CommandLine name="MitreRef=T1136,Technique=Create Account,Tactic=Persistence,Alert=Account Creation via command line,Alert=Account Creation" condition="begin with">dsmod </CommandLine>
+			<Image name="MitreRef=T1087,Technique=Account Discovery,Tactic=Discovery,Alert=DSQuery.EXE Discovery" condition="image">dsquery.exe</Image><!-- Query domain-->
+			<Image name="MitreRef=T1136,Technique=Create Account,Tactic=Persistence,Alert=Account Creation via command line,Alert=Account creation with dsmod" condition="image">dsmod.exe</Image><!-- Query domain-->
+			<Image name="MitreRef=T1136,Technique=Create Account,Tactic=Persistence,Alert=Account Creation via command line,Alert=Account creation with dsadd" condition="image">dsadd.exe</Image><!-- Query domain-->
+			<Image name="MitreRef=T1049,Technique=System Network Connections Discovery,Tactic=Discovery,Alert=Account Discovery,MitreURL= https://attack.mitre.org/wiki/Technique/T1049" condition="image">whoami.exe</Image>
+			<Image name="MitreRef=T1049,Technique=Discovery,Tactic=Discovery" condition="image">ipconfig.exe</Image> <!--Microsoft:Windows: shows ip configuration -->
+			<Image name="MitreRef=T1057,Technique=Process Discovery,Tactic=Discovery,Alert=Process Discovery" condition="image">tasklist.exe</Image> <!--Microsoft:Windows: shows current running processes-->
+			<Image name="MitreRef=T1016,Technique=System Information Discovery,Tactic=Discovery,Alert=System Information Discovery" condition="image">sysinfo.exe</Image> <!--Microsoft:Windows: shows systeminformation -->
+			<Image name="MitreRef=T1049,Technique=System Network Connections Discovery,Tactic=Discovery,Alert=System Network Connections Discovery" condition="image">netstat.exe</Image> <!--Microsoft:Windows: shows protocol statistics and current TCP/IP network connections -->
+			<Image name="MitreRef=T1057,Technique=Process Discovery,Tactic=Discovery,Alert=Process Discovery" condition="image">qprocess.exe</Image> <!--Microsoft:Windows: shows information about processes -->
+			<Image name="MitreRef=T1049,Technique=System Network Connections Discovery,Tactic=Discovery,Alert=User enumeration/Discovery" condition="image">quser.exe</Image> <!--Microsoft:Windows: shows logged-on users -->
+			<Image name="MitreRef=T1016,Technique=System Network Configuration Discovery,Tactic=Discovery,Alert=Network Configureation discovery with route.exe" condition="image">route.exe</Image> <!--Microsoft:Windows: manipulates network routing tables -->
+			<CommandLine name="MitreRef=T1016,Technique=System Information Discovery,Tactic=Discovery,Info=System information discovery with reg.exe" condition="contains">reg query</CommandLine> <!--Microsoft:Windows: reads and modifies the Windows register -->
+			<CommandLine name="MitreRef=T1016,Technique=System Information Discovery,Tactic=Discovery,Info=System information discovery with reg.exe" condition="contains">reg.exe query</CommandLine> <!--Microsoft:Windows: reads and modifies the Windows register -->
+			<Image name="MitreRef=T1016,Technique=System Network Connections Discovery,Tactic=Discovery,Alert=Network Connection Discovery with netsh" condition="image">netsh.exe</Image> <!--Microsoft:Windows: manipulate the firewall -->
+			<!--MITRE TACTIC: Execution-->
+			<CommandLine name="MitreRef=T1059,Technique=Command-Line Interface,Tactic=Execution,Alert=Metasploit Detection" condition="contains">COMSPEC</CommandLine>
+			<ParentCommandLine name="MitreRef=T1059,Technique=Command-Line Interface,Tactic=Execution,Alert=Metasploit Detection" condition="contains">COMSPEC</ParentCommandLine>
+			<CommandLine name="MitreRef=T1086,Technique=Powershell,Tactic=Execution,Alert=Powershell Downgrade attack" condition="begin with">powershell -Version</CommandLine> <!--Microsoft:Windows: PowerShell interface-->
+			<CommandLine name="MitreRef=T1086,Technique=PowerShell,Tactic=Execution,Alert=invoke-shellcode" condition="contains">Shellcode</CommandLine>
+			<Image name="MitreRef=T1202,Technique=Indirect Command Execution,Tactic=Execution,Alert=Indirect Command Execution" condition="image">forfiles.exe</Image>
+			<ParentImage name="MitreRef=T1202,Technique=Indirect Command Execution,Tactic=Execution,Alert=Indirect command execution child process" condition="image">forfiles.exe</ParentImage>
+			<ParentImage name="MitreRef=T1202,Technique=Indirect Command Execution,Tactic=Execution" condition="image">pcalua.exe</ParentImage>
+			<!--MITRE TACTIC: Persistence-->
+			<Image name="MitreRef=T1053,Technique=Scheduled Task,Tactic=Execution/Persistence/Privledge Escalation,Alert=Task Scheduler execution" condition="image">schtasks.exe</Image>
+			<ParentImage name="MitreRef=T1053,Technique=Scheduled Task,Tactic=Execution/Persistence/Privledge Escalation,Alert=Child process from schtasks" condition="image">schtasks.exe</ParentImage>
+			<CommandLine name="MitreRef=T1053,Technique=Scheduled Task,Tactic=Execution/Persistence/Privledge Escalation,Alert=schtasks task created" condition="contains">schtasks /create</CommandLine>
+			<CommandLine name="MitreRef=T1053,Technique=Scheduled Task,Tactic=Execution/Persistence/Privledge Escalation,Alert=schtasks task created" condition="contains">schtasks.exe /create</CommandLine>
+			<ParentImage name="MitreRef=T1053,Technique=Scheduled Task,Tactic=Execution/Persistence/Privledge Escalation,Alert=at.exe Task scheduler execution" condition="image">at.exe</ParentImage>
+			<CommandLine name="MitreRef=ToDo,Technique=Powershell Injection Persistence Bypass - Execution, Lateral Movement,Alert=Powershell Injection persistence bypass" condition="contains">System.Management.Automation</CommandLine>
+			<CommandLine name="MitreRef=T1136,Technique=Create Account,Tactic=Persistence,Alert=Account Creation via command line,Alert=User added by Command line" condition="contains">net user /add</CommandLine>
+			<CommandLine name="MitreRef=T1136,Technique=Create Account,Tactic=Persistence,Alert=Administrator added via Command Line,Alert=Adminstrator added via command line" condition="contains">net localgroup administrators /add</CommandLine>
+			<CommandLine name="MitreRef=T1050,Technique=New Service,Tactic=Persistence/Privilege Escalation,Alert=Service added via Command Line,Alert=Service added via command line" condition="contains">sc create</CommandLine>
+			<CommandLine name="MitreRef=T1050,Technique=New Service,Tactic=Persistence/Privilege Escalation,Alert=Service added via Command Line,Alert=Service added via command line" condition="contains">sc.exe create</CommandLine>
+			<CommandLine name="MitreRef=T1050,Technique=New Service,Tactic=Persistence/Privilege Escalation,Alert=Service added via Command Line,Alert=Service added via command line" condition="contains">new-service</CommandLine>
+			<!--MITRE TECHNIQUE: Obfuscation-->
+			<CommandLine name="MitreRef=T1001,Technique=Data Obfuscation,Tactic=Command And Control,Alert=Hacking" condition="contains">FromBase64String</CommandLine>
+			<CommandLine name="MitreRef=T1086,Technique=PowerShell,Tactic=Execution,Alert=Detect Secure Strings,Alert=Powershell Secure String creation" condition="contains">convertto-securestring</CommandLine>
+			<CommandLine name="MitreRef=T1086,Technique=PowerShell,Tactic=Execution,Alert=Detect some more obfuscation,Alert=Powershell Obfuscation with VerbosePreference" condition="contains">VerbosePreference.ToString</CommandLine>
+			<CommandLine name="MitreRef=T1001,Technique=Data Obfuscation,Tactic=Command And Control,Alert=Hacking" condition="contains">runtime.interopservices.marshal</CommandLine>
+			<CommandLine name="MitreRef=T1001,Technique=Data Obfuscation,Tactic=Command And Control,Alert=Hacking" condition="contains">VerbosePreference.ToString</CommandLine>
+			<CommandLine name="MitreRef=T1001,Technique=Data Obfuscation,Tactic=Command And Control,Alert=Hacking" condition="contains">-windowstyle h</CommandLine>
+			<CommandLine name="MitreRef=T1001,Technique=Data Obfuscation,Tactic=Command And Control,Alert=Hacking" condition="contains">-windowstyl h</CommandLine>
+			<CommandLine name="MitreRef=T1001,Technique=Data Obfuscation,Tactic=Command And Control,Alert=Hacking" condition="contains">-windowsty h</CommandLine>
+			<CommandLine name="MitreRef=T1001,Technique=Data Obfuscation,Tactic=Command And Control,Alert=Hacking" condition="contains">-windowst h</CommandLine>
+			<CommandLine name="MitreRef=T1001,Technique=Data Obfuscation,Tactic=Command And Control,Alert=Hacking" condition="contains">-windows h</CommandLine>
+			<CommandLine name="MitreRef=T1001,Technique=Data Obfuscation,Tactic=Command And Control,Alert=Hacking" condition="contains">-window h</CommandLine>
+			<CommandLine name="MitreRef=T1001,Technique=Data Obfuscation,Tactic=Command And Control,Alert=Hacking" condition="contains">-windo h</CommandLine>
+			<CommandLine name="MitreRef=T1001,Technique=Data Obfuscation,Tactic=Command And Control,Alert=Hacking" condition="contains">-wind h</CommandLine>
+			<CommandLine name="MitreRef=T1001,Technique=Data Obfuscation,Tactic=Command And Control,Alert=Hacking" condition="contains">-win h</CommandLine>
+			<CommandLine name="MitreRef=T1001,Technique=Data Obfuscation,Tactic=Command And Control,Alert=Hacking" condition="contains">-wi h</CommandLine>
+			<CommandLine name="MitreRef=T1001,Technique=Data Obfuscation,Tactic=Command And Control,Alert=Hacking" condition="contains">-w h</CommandLine>
+			<CommandLine name="MitreRef=T1001,Technique=Data Obfuscation,Tactic=Command And Control,Alert=Hacking" condition="contains">-wi h</CommandLine>
+			<CommandLine name="MitreRef=T1001,Technique=Data Obfuscation,Tactic=Command And Control,Alert=Hacking" condition="contains">-win hi</CommandLine>
+			<CommandLine name="MitreRef=T1001,Technique=Data Obfuscation,Tactic=Command And Control,Alert=Hacking" condition="contains">-win hid</CommandLine>
+			<CommandLine name="MitreRef=T1001,Technique=Data Obfuscation,Tactic=Command And Control,Alert=Hacking" condition="contains">-win hidd</CommandLine>
+			<CommandLine name="MitreRef=T1001,Technique=Data Obfuscation,Tactic=Command And Control,Alert=Hacking" condition="contains">-win hidde</CommandLine>
+			<CommandLine name="MitreRef=T1001,Technique=Data Obfuscation,Tactic=Command And Control,Alert=Hacking" condition="contains">-win hidden</CommandLine>
+			<CommandLine name="MitreRef=T1001,Technique=Data Obfuscation,Tactic=Command And Control,Alert=Hacking" condition="contains">-Nop</CommandLine>
+			<CommandLine name="MitreRef=T1001,Technique=Data Obfuscation,Tactic=Command And Control,Alert=Hacking" condition="contains">-Noni</CommandLine>
+			<CommandLine name="MitreRef=T1001,Technique=Data Obfuscation,Tactic=Command And Control,Alert=Hacking" condition="contains">-encodedc</CommandLine>
+			<CommandLine name="MitreRef=T1001,Technique=Data Obfuscation,Tactic=Command And Control" condition="contains">-ec</CommandLine>
+			<CommandLine name="MitreRef=T1001,Technique=Data Obfuscation,Tactic=Command And Control" condition="contains">-en</CommandLine>
+			<CommandLine name="MitreRef=T1001,Technique=Data Obfuscation,Tactic=Command And Control,Alert=Hacking" condition="contains">^c^o^m^S^p^E^c^</CommandLine>
+			<CommandLine name="MitreRef=T1001,Technique=Data Obfuscation,Tactic=Command And Control,Alert=Hacking" condition="contains">C^om^S^pEc</CommandLine>
+		</ProcessCreate>
 	<RuleGroup name="" groupRelation="or">
 		<ProcessCreate onmatch="exclude">
 			<!--SECTION: Microsoft Windows-->
@@ -224,79 +329,7 @@
 			<!--SECTION: Google-->
 			<CommandLine condition="begin with">"C:\Program Files (x86)\Google\Chrome\Application\chrome.exe" --type=</CommandLine> <!--Google:Chrome: massive command-line arguments-->
 			<CommandLine condition="begin with">"C:\Program Files\Google\Chrome\Application\chrome.exe" --type=</CommandLine> <!--Google:Chrome: massive command-line arguments-->
-			<!--MITRE TACTIC: Defense Evasion-->
-			<ParentImage name="Alert=Unknown Process Execution" condition="contains">unknown process</ParentImage>
-			<Image name="Alert=Unknown Process Execution" condition="contains">unknown process</Image>
-			<Image condition="image" name="Technique=Disabling Security Tools,Tactic=Defense Evasion,MitreRef=1089">PsKill.exe</Image>
-			<Image condition="image" name="Technique=Disabling Security Tools,Tactic=Defense Evasion,MitreRef=1089">MpCmdRun.exe</Image>
-			<CommandLine name="MitreRef=T1070,Technique=Indicator Removal on Host,Tactic=Defense Evasion,Alert=Eventlog Removal Detected" condition="contains">wevutil cl</CommandLine>
-			<Image name="MitreRef=T1070,Technique=Indicator Removal on Host,Tactic=Defense Evasion" condition="image">wevutil.exe</Image>
-			<Image name="MitreRef=T1170,Technique=MSHTA,Tactic=Defense Evasion/Execution,Alert=MSHTA Execution" condition="image">mshta.exe</Image>
-			<ParentImage name="MitreRef=T1170,Technique=MSHTA,Tactic=Defense Evasion/Execution,Alert=MSHTA Execution" condition="image">mshta.exe</ParentImage>
-			<CommandLine name="MitreRef=T1118,Technique=InstallUtil,Tactic=Defense Evasion/Execution,Alert=InstallUtil" condition="contains">/logfile= /LogToConsole=false /U</CommandLine>
-			<!--MITRE TACTIC: Discovery-->
-			<CommandLine name="MitreRef=T1087,Technique=Account Discovery,Tactic=Discovery,Alert=NET.EXE Discovery" condition="contains">net user</CommandLine>
-			<CommandLine name="MitreRef=T1087,Technique=Account Discovery,Tactic=Discovery,Alert=NET.EXE Discovery" condition="contains">net  user</CommandLine>
-			<CommandLine name="MitreRef=T1087,Technique=Account Discovery,Tactic=Discovery,Alert=NET.EXE Discovery" condition="contains">net.exe user</CommandLine>
-			<CommandLine name="MitreRef=T1087,Technique=Account Discovery,Tactic=Discovery,Alert=NET.EXE Discovery" condition="contains">net.exe  user</CommandLine>
-			<CommandLine name="MitreRef=T1087,Technique=Account Discovery,Tactic=Discovery,Alert=NET.EXE Discovery" condition="contains">net1 user</CommandLine>
-			<CommandLine name="MitreRef=T1087,Technique=Account Discovery,Tactic=Discovery,Alert=NET.EXE Discovery" condition="contains">net1  user</CommandLine>
-			<CommandLine name="MitreRef=T1087,Technique=Account Discovery,Tactic=Discovery,Alert=NET.EXE Discovery" condition="contains">net1.exe user</CommandLine>
-			<CommandLine name="MitreRef=T1087,Technique=Account Discovery,Tactic=Discovery,Alert=NET.EXE Discovery" condition="contains">net1.exe  user</CommandLine>
-			<CommandLine name="MitreRef=T1087,Technique=Account Discovery,Tactic=Discovery,Alert=NET.EXE Discovery" condition="contains">net localgroup</CommandLine>
-			<CommandLine name="MitreRef=T1087,Technique=Account Discovery,Tactic=Discovery,Alert=NET.EXE Discovery" condition="contains">net  localgroup</CommandLine>
-			<CommandLine name="MitreRef=T1087,Technique=Account Discovery,Tactic=Discovery,Alert=NET.EXE Discovery" condition="contains">net.exe localgroup</CommandLine>
-			<CommandLine name="MitreRef=T1087,Technique=Account Discovery,Tactic=Discovery,Alert=NET.EXE Discovery" condition="contains">net.exe  localgroup</CommandLine>
-			<CommandLine name="MitreRef=T1087,Technique=Account Discovery,Tactic=Discovery,Alert=NET.EXE Discovery" condition="contains">net1 localgroup</CommandLine>
-			<CommandLine name="MitreRef=T1087,Technique=Account Discovery,Tactic=Discovery,Alert=NET.EXE Discovery" condition="contains">net1  localgroup</CommandLine>
-			<CommandLine name="MitreRef=T1087,Technique=Account Discovery,Tactic=Discovery,Alert=NET.EXE Discovery" condition="contains">net group</CommandLine>
-			<CommandLine name="MitreRef=T1087,Technique=Account Discovery,Tactic=Discovery,Alert=NET.EXE Discovery" condition="contains">net  group</CommandLine>
-			<CommandLine name="MitreRef=T1087,Technique=Account Discovery,Tactic=Discovery,Alert=NET.EXE Discovery" condition="contains">net group</CommandLine>
-			<CommandLine name="MitreRef=T1087,Technique=Account Discovery,Tactic=Discovery,Alert=NET.EXE Discovery" condition="contains">net  group</CommandLine>
-			<CommandLine name="MitreRef=T1087,Technique=Account Discovery,Tactic=Discovery,Alert=NET.EXE Discovery" condition="contains">net.exe group</CommandLine>
-			<CommandLine name="MitreRef=T1087,Technique=Account Discovery,Tactic=Discovery,Alert=NET.EXE Discovery" condition="contains">net.exe  group</CommandLine>
-			<CommandLine name="MitreRef=T1087,Technique=Account Discovery,Tactic=Discovery,Alert=NET.EXE Discovery" condition="contains">net group</CommandLine>
-			<CommandLine name="MitreRef=T1087,Technique=Account Discovery,Tactic=Discovery,Alert=NET.EXE Discovery" condition="contains">net  group</CommandLine>
-			<CommandLine name="MitreRef=T1087,Technique=Account Discovery,Tactic=Discovery,Alert=NET.EXE Discovery" condition="contains">net.exe group</CommandLine>
-			<CommandLine name="MitreRef=T1087,Technique=Account Discovery,Tactic=Discovery,Alert=NET.EXE Discovery" condition="contains">net.exe  group</CommandLine>
-			<CommandLine name="MitreRef=T1087,Technique=Account Discovery,Tactic=Discovery,Alert=NET.EXE Discovery" condition="contains">net1.exe group</CommandLine>
-			<CommandLine name="MitreRef=T1087,Technique=Account Discovery,Tactic=Discovery,Alert=NET.EXE Discovery" condition="begin with">net1.exe  group</CommandLine>
-			<CommandLine name="MitreRef=T1136,Technique=Create Account,Tactic=Persistence,Alert=Account Creation via command line,Alert=Account Creation" condition="begin with">dsadd </CommandLine>
-			<CommandLine name="MitreRef=T1136,Technique=Create Account,Tactic=Persistence,Alert=Account Creation via command line,Alert=Account Creation" condition="begin with">dsmod </CommandLine>
-			<Image name="MitreRef=T1087,Technique=Account Discovery,Tactic=Discovery,Alert=DSQuery.EXE Discovery" condition="image">dsquery.exe</Image><!-- Query domain-->
-			<Image name="MitreRef=T1136,Technique=Create Account,Tactic=Persistence,Alert=Account Creation via command line,Alert=Account creation with dsmod" condition="image">dsmod.exe</Image><!-- Query domain-->
-			<Image name="MitreRef=T1136,Technique=Create Account,Tactic=Persistence,Alert=Account Creation via command line,Alert=Account creation with dsadd" condition="image">dsadd.exe</Image><!-- Query domain-->
-			<Image name="MitreRef=T1049,Technique=System Network Connections Discovery,Tactic=Discovery,Alert=Account Discovery,MitreURL= https://attack.mitre.org/wiki/Technique/T1049" condition="image">whoami.exe</Image>
-			<Image name="MitreRef=T1049,Technique=Discovery,Tactic=Discovery" condition="image">ipconfig.exe</Image> <!--Microsoft:Windows: shows ip configuration -->
-			<Image name="MitreRef=T1057,Technique=Process Discovery,Tactic=Discovery,Alert=Process Discovery" condition="image">tasklist.exe</Image> <!--Microsoft:Windows: shows current running processes-->
-			<Image name="MitreRef=T1016,Technique=System Information Discovery,Tactic=Discovery,Alert=System Information Discovery" condition="image">sysinfo.exe</Image> <!--Microsoft:Windows: shows systeminformation -->
-			<Image name="MitreRef=T1049,Technique=System Network Connections Discovery,Tactic=Discovery,Alert=System Network Connections Discovery" condition="image">netstat.exe</Image> <!--Microsoft:Windows: shows protocol statistics and current TCP/IP network connections -->
-			<Image name="MitreRef=T1057,Technique=Process Discovery,Tactic=Discovery,Alert=Process Discovery" condition="image">qprocess.exe</Image> <!--Microsoft:Windows: shows information about processes -->
-			<Image name="MitreRef=T1049,Technique=System Network Connections Discovery,Tactic=Discovery,Alert=User enumeration/Discovery" condition="image">quser.exe</Image> <!--Microsoft:Windows: shows logged-on users -->
-			<Image name="MitreRef=T1016,Technique=System Network Configuration Discovery,Tactic=Discovery,Alert=Network Configureation discovery with route.exe" condition="image">route.exe</Image> <!--Microsoft:Windows: manipulates network routing tables -->
-			<CommandLine name="MitreRef=T1016,Technique=System Information Discovery,Tactic=Discovery,Info=System information discovery with reg.exe" condition="contains">reg query</CommandLine> <!--Microsoft:Windows: reads and modifies the Windows register -->
-			<CommandLine name="MitreRef=T1016,Technique=System Information Discovery,Tactic=Discovery,Info=System information discovery with reg.exe" condition="contains">reg.exe query</CommandLine> <!--Microsoft:Windows: reads and modifies the Windows register -->
-			<Image name="MitreRef=T1016,Technique=System Network Connections Discovery,Tactic=Discovery,Alert=Network Connection Discovery with netsh" condition="image">netsh.exe</Image> <!--Microsoft:Windows: manipulate the firewall -->
-			<!--MITRE TACTIC: Execution-->
-			<CommandLine name="MitreRef=T1059,Technique=Command-Line Interface,Tactic=Execution,Alert=Metasploit Detection" condition="contains">COMSPEC</CommandLine>
-			<ParentCommandLine name="MitreRef=T1059,Technique=Command-Line Interface,Tactic=Execution,Alert=Metasploit Detection" condition="contains">COMSPEC</ParentCommandLine>
-			<CommandLine name="MitreRef=T1086,Technique=Powershell,Tactic=Execution,Alert=Powershell Downgrade attack" condition="begin with">powershell -Version</CommandLine> <!--Microsoft:Windows: PowerShell interface-->
-			<CommandLine name="MitreRef=T1086,Technique=PowerShell,Tactic=Execution,Alert=invoke-shellcode" condition="contains">Shellcode</CommandLine>
-			<Image name="MitreRef=T1202,Technique=Indirect Command Execution,Tactic=Execution,Alert=Indirect Command Execution" condition="image">forfiles.exe</Image>
-			<ParentImage name="MitreRef=T1202,Technique=Indirect Command Execution,Tactic=Execution,Alert=Indirect command execution child process" condition="image">forfiles.exe</ParentImage>
-			<ParentImage name="MitreRef=T1202,Technique=Indirect Command Execution,Tactic=Execution" condition="image">pcalua.exe</ParentImage>
-			<!--MITRE TACTIC: Persistence-->
-			<Image name="MitreRef=T1053,Technique=Scheduled Task,Tactic=Execution/Persistence/Privledge Escalation,Alert=Task Scheduler execution" condition="image">schtasks.exe</Image>
-			<ParentImage name="MitreRef=T1053,Technique=Scheduled Task,Tactic=Execution/Persistence/Privledge Escalation,Alert=Child process from schtasks" condition="image">schtasks.exe</ParentImage>
-			<CommandLine name="MitreRef=T1053,Technique=Scheduled Task,Tactic=Execution/Persistence/Privledge Escalation,Alert=schtasks task created" condition="contains">schtasks /create</CommandLine>
-			<CommandLine name="MitreRef=T1053,Technique=Scheduled Task,Tactic=Execution/Persistence/Privledge Escalation,Alert=schtasks task created" condition="contains">schtasks.exe /create</CommandLine>
-			<ParentImage name="MitreRef=T1053,Technique=Scheduled Task,Tactic=Execution/Persistence/Privledge Escalation,Alert=at.exe Task scheduler execution" condition="image">at.exe</ParentImage>
-			<CommandLine name="MitreRef=ToDo,Technique=Powershell Injection Persistence Bypass - Execution, Lateral Movement,Alert=Powershell Injection persistence bypass" condition="contains">System.Management.Automation</CommandLine>
-			<CommandLine name="MitreRef=T1136,Technique=Create Account,Tactic=Persistence,Alert=Account Creation via command line,Alert=User added by Command line" condition="contains">net user /add</CommandLine>
-			<CommandLine name="MitreRef=T1136,Technique=Create Account,Tactic=Persistence,Alert=Administrator added via Command Line,Alert=Adminstrator added via command line" condition="contains">net localgroup administrators /add</CommandLine>
-			<CommandLine name="MitreRef=T1050,Technique=New Service,Tactic=Persistence/Privilege Escalation,Alert=Service added via Command Line,Alert=Service added via command line" condition="contains">sc create</CommandLine>
-			<CommandLine name="MitreRef=T1050,Technique=New Service,Tactic=Persistence/Privilege Escalation,Alert=Service added via Command Line,Alert=Service added via command line" condition="contains">sc.exe create</CommandLine>
-			<CommandLine name="MitreRef=T1050,Technique=New Service,Tactic=Persistence/Privilege Escalation,Alert=Service added via Command Line,Alert=Service added via command line" condition="contains">new-service</CommandLine>
+			
 		</ProcessCreate>
 	</RuleGroup>
 	
