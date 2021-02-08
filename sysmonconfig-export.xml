@@ -224,6 +224,17 @@
 			<!--SECTION: Google-->
 			<CommandLine condition="begin with">"C:\Program Files (x86)\Google\Chrome\Application\chrome.exe" --type=</CommandLine> <!--Google:Chrome: massive command-line arguments-->
 			<CommandLine condition="begin with">"C:\Program Files\Google\Chrome\Application\chrome.exe" --type=</CommandLine> <!--Google:Chrome: massive command-line arguments-->
+			<!--MITRE TACTIC: Defense Evasion-->
+			<ParentImage name="Alert=Unknown Process Execution" condition="contains">unknown process</ParentImage>
+			<Image name="Alert=Unknown Process Execution" condition="contains">unknown process</Image>
+			<Image condition="image" name="Technique=Disabling Security Tools,Tactic=Defense Evasion,MitreRef=1089">PsKill.exe</Image>
+			<Image condition="image" name="Technique=Disabling Security Tools,Tactic=Defense Evasion,MitreRef=1089">MpCmdRun.exe</Image>
+			<CommandLine name="MitreRef=T1070,Technique=Indicator Removal on Host,Tactic=Defense Evasion,Alert=Eventlog Removal Detected" condition="contains">wevutil cl</CommandLine>
+			<Image name="MitreRef=T1070,Technique=Indicator Removal on Host,Tactic=Defense Evasion" condition="image">wevutil.exe</Image>
+			<Image name="MitreRef=T1170,Technique=MSHTA,Tactic=Defense Evasion/Execution,Alert=MSHTA Execution" condition="image">mshta.exe</Image>
+			<ParentImage name="MitreRef=T1170,Technique=MSHTA,Tactic=Defense Evasion/Execution,Alert=MSHTA Execution" condition="image">mshta.exe</ParentImage>
+			<CommandLine name="MitreRef=T1118,Technique=InstallUtil,Tactic=Defense Evasion/Execution,Alert=InstallUtil" condition="contains">/logfile= /LogToConsole=false /U</CommandLine>
+
 		</ProcessCreate>
 	</RuleGroup>
 	
