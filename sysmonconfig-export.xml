@@ -277,7 +277,26 @@
 			<CommandLine name="MitreRef=T1016,Technique=System Information Discovery,Tactic=Discovery,Info=System information discovery with reg.exe" condition="contains">reg query</CommandLine> <!--Microsoft:Windows: reads and modifies the Windows register -->
 			<CommandLine name="MitreRef=T1016,Technique=System Information Discovery,Tactic=Discovery,Info=System information discovery with reg.exe" condition="contains">reg.exe query</CommandLine> <!--Microsoft:Windows: reads and modifies the Windows register -->
 			<Image name="MitreRef=T1016,Technique=System Network Connections Discovery,Tactic=Discovery,Alert=Network Connection Discovery with netsh" condition="image">netsh.exe</Image> <!--Microsoft:Windows: manipulate the firewall -->
-			
+			<!--MITRE TACTIC: Execution-->
+			<CommandLine name="MitreRef=T1059,Technique=Command-Line Interface,Tactic=Execution,Alert=Metasploit Detection" condition="contains">COMSPEC</CommandLine>
+			<ParentCommandLine name="MitreRef=T1059,Technique=Command-Line Interface,Tactic=Execution,Alert=Metasploit Detection" condition="contains">COMSPEC</ParentCommandLine>
+			<CommandLine name="MitreRef=T1086,Technique=Powershell,Tactic=Execution,Alert=Powershell Downgrade attack" condition="begin with">powershell -Version</CommandLine> <!--Microsoft:Windows: PowerShell interface-->
+			<CommandLine name="MitreRef=T1086,Technique=PowerShell,Tactic=Execution,Alert=invoke-shellcode" condition="contains">Shellcode</CommandLine>
+			<Image name="MitreRef=T1202,Technique=Indirect Command Execution,Tactic=Execution,Alert=Indirect Command Execution" condition="image">forfiles.exe</Image>
+			<ParentImage name="MitreRef=T1202,Technique=Indirect Command Execution,Tactic=Execution,Alert=Indirect command execution child process" condition="image">forfiles.exe</ParentImage>
+			<ParentImage name="MitreRef=T1202,Technique=Indirect Command Execution,Tactic=Execution" condition="image">pcalua.exe</ParentImage>
+			<!--MITRE TACTIC: Persistence-->
+			<Image name="MitreRef=T1053,Technique=Scheduled Task,Tactic=Execution/Persistence/Privledge Escalation,Alert=Task Scheduler execution" condition="image">schtasks.exe</Image>
+			<ParentImage name="MitreRef=T1053,Technique=Scheduled Task,Tactic=Execution/Persistence/Privledge Escalation,Alert=Child process from schtasks" condition="image">schtasks.exe</ParentImage>
+			<CommandLine name="MitreRef=T1053,Technique=Scheduled Task,Tactic=Execution/Persistence/Privledge Escalation,Alert=schtasks task created" condition="contains">schtasks /create</CommandLine>
+			<CommandLine name="MitreRef=T1053,Technique=Scheduled Task,Tactic=Execution/Persistence/Privledge Escalation,Alert=schtasks task created" condition="contains">schtasks.exe /create</CommandLine>
+			<ParentImage name="MitreRef=T1053,Technique=Scheduled Task,Tactic=Execution/Persistence/Privledge Escalation,Alert=at.exe Task scheduler execution" condition="image">at.exe</ParentImage>
+			<CommandLine name="MitreRef=ToDo,Technique=Powershell Injection Persistence Bypass - Execution, Lateral Movement,Alert=Powershell Injection persistence bypass" condition="contains">System.Management.Automation</CommandLine>
+			<CommandLine name="MitreRef=T1136,Technique=Create Account,Tactic=Persistence,Alert=Account Creation via command line,Alert=User added by Command line" condition="contains">net user /add</CommandLine>
+			<CommandLine name="MitreRef=T1136,Technique=Create Account,Tactic=Persistence,Alert=Administrator added via Command Line,Alert=Adminstrator added via command line" condition="contains">net localgroup administrators /add</CommandLine>
+			<CommandLine name="MitreRef=T1050,Technique=New Service,Tactic=Persistence/Privilege Escalation,Alert=Service added via Command Line,Alert=Service added via command line" condition="contains">sc create</CommandLine>
+			<CommandLine name="MitreRef=T1050,Technique=New Service,Tactic=Persistence/Privilege Escalation,Alert=Service added via Command Line,Alert=Service added via command line" condition="contains">sc.exe create</CommandLine>
+			<CommandLine name="MitreRef=T1050,Technique=New Service,Tactic=Persistence/Privilege Escalation,Alert=Service added via Command Line,Alert=Service added via command line" condition="contains">new-service</CommandLine>
 		</ProcessCreate>
 	</RuleGroup>
 	
