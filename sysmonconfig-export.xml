@@ -385,6 +385,17 @@
 			<Image name="Caution" condition="begin with">C:\intel</Image> <!-- Credit @blu3_team [ https://blu3-team.blogspot.com/2019/05/netconn-from-suspicious-directories.html ] -->
 			<Image name="Caution" condition="begin with">C:\Windows\fonts</Image> <!-- Credit @blu3_team [ https://blu3-team.blogspot.com/2019/05/netconn-from-suspicious-directories.html ] -->
 			<Image name="Caution" condition="begin with">C:\Windows\system32\config</Image> <!-- Credit @blu3_team [ https://blu3-team.blogspot.com/2019/05/netconn-from-suspicious-directories.html ] -->
+			<Image condition="contains">\Windows\IME\</Image>
+			<Image name="Alert=Network connection in addins,suspicious_net_event=True" condition="contains">\Windows\addins\</Image>
+			<Image condition="contains">chrome.exe</Image>
+			<Image condition="contains">iexplore.exe</Image>
+			<Image condition="contains">firefox.exe</Image>
+			<Image condition="contains">MicrosoftEdgeCP.exe</Image>
+			<Image condition="contains">MicrosoftEdge.exe</Image>
+			<Image condition="contains">explorer.exe</Image>
+			<Image condition="contains">config\systemprofile\</Image>
+			<!--<Image name="Info=Non-Exe Connecting to network" condition="excludes">.exe</Image>-->
+			<Image name="Info=Unknown Process Connecting to network" condition="contains">unknown process</Image>
 			<!--Suspicious Windows tools-->
 			<Image condition="image">at.exe</Image> <!--Windows: Remote task scheduling, removed in Win10 | Credit @ion-storm -->
 			<Image condition="image">certutil.exe</Image> <!--Windows: Certificate tool can contact outbound | Credit @ion-storm @FVT [ https://twitter.com/FVT/status/834433734602530817 ] -->
@@ -422,6 +433,28 @@
 			<Image condition="image">tasklist.exe</Image> <!--Windows: List processes, has remote ability -->
 			<Image condition="image">wmic.exe</Image> <!--WindowsManagementInstrumentation: Credit @Cyb3rOps [ https://gist.github.com/Neo23x0/a4b4af9481e01e749409 ] -->
 			<Image condition="image">wscript.exe</Image> <!--WindowsScriptingHost: | Credit @arekfurt -->
+			<Image condition="contains">psexe</Image><!--Detect PSExec, PSexec services-->
+			<Image condition="contains">pskill</Image><!--Detect pskill-->
+			<Image condition="contains">psshutdown</Image><!--Detect PsShutdown-->
+			<Image condition="contains">psservice</Image><!--Detect PsService-->
+			<Image condition="contains">PsPasswd</Image><!--Detect PsPasswd-->
+			<!--Tor-->
+			<Image name="Alert=Tor Connection" condition="image">tor.exe</Image>
+			<DestinationIp name="Alert=Tor Connection" condition="is">185.41.154.130</DestinationIp>
+			<DestinationIp name="Alert=Tor Connection" condition="is">37.252.190.176</DestinationIp>
+			<DestinationIp name="Alert=Tor Connection" condition="is">82.118.17.235</DestinationIp>
+			<DestinationIp name="Alert=Tor Connection" condition="is">83.163.164.15</DestinationIp>
+			<DestinationIp name="Alert=Tor Connection" condition="is">69.163.34.173</DestinationIp>
+			<DestinationIp name="Alert=Tor Connection" condition="is">159.89.151.231</DestinationIp>
+			<DestinationIp name="Alert=Tor Connection" condition="is">212.47.246.229</DestinationIp>
+			<DestinationIp name="Alert=Tor Connection" condition="is">84.40.112.70</DestinationIp>
+			<DestinationIp name="Alert=Tor Connection" condition="is">2.137.16.245</DestinationIp>
+			<DestinationIp name="Alert=Tor Connection" condition="is">199.249.223.62</DestinationIp>
+			<DestinationIp name="Alert=Tor Connection" condition="is">185.22.172.237</DestinationIp>
+			<DestinationIp name="Alert=Tor Connection" condition="is">88.99.216.194</DestinationIp>
+			<DestinationIp name="Alert=Tor Connection" condition="is">185.13.39.197</DestinationIp>
+			<DestinationIp name="Alert=Tor Connection" condition="is">162.247.72.201</DestinationIp>
+			<DestinationIp name="Alert=Tor Connection" condition="is">174.127.217.73</DestinationIp>
 			<!--Relevant 3rd Party Tools-->
 			<Image condition="image">nc.exe</Image> <!-- Nmap's modern version of netcat [ https://nmap.org/ncat/guide/index.html#ncat-overview ] [ https://securityblog.gr/1517/create-backdoor-in-windows-with-ncat/ ] -->
 			<Image condition="image">ncat.exe</Image> <!-- Nmap's modern version of netcat [ https://nmap.org/ncat/guide/index.html#ncat-overview ] [ https://securityblog.gr/1517/create-backdoor-in-windows-with-ncat/ ] -->
@@ -456,6 +489,7 @@
 
 	<RuleGroup name="" groupRelation="or">
 		<NetworkConnect onmatch="exclude">
+			<!--Alot of room to improve this exclude list JAC-->
 			<!--SECTION: Microsoft-->
 			<Image condition="begin with">C:\ProgramData\Microsoft\Windows Defender\Platform\</Image>
 			<Image condition="end with">AppData\Local\Microsoft\Teams\current\Teams.exe</Image> <!--Microsoft: Teams-->
