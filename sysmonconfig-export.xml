@@ -1275,11 +1275,11 @@
 		<!--ADDITIONAL REFERENCE: [ https://rawsec.lu/blog/posts/2017/Sep/19/sysmon-v610-vs-wmi-persistence/ ] -->
 
 		<!--DATA: EventType, UtcTime, Operation, User, Name, Type, Destination, Consumer, Filter-->
-	<RuleGroup name="" groupRelation="or">
+	
 		<WmiEvent onmatch="exclude">
 			<!--NOTE: Using exclude with no rules means everything will be logged-->
 		</WmiEvent>
-	</RuleGroup>
+	
 
 	<!--SYSMON EVENT ID 22 : DNS QUERY [DnsQuery]-->
 		<!--EVENT 22: "Dns query"-->
@@ -1317,7 +1317,7 @@
 		<!-- Rejected: .windows.net, customer content -->
 		<!-- Rejected: *github.com, customer content, including open-source malware components -->
 
-	<RuleGroup name="" groupRelation="or">
+	
 		<DnsQuery onmatch="exclude">
 			<!--Network noise-->
 			<QueryName condition="end with">.arpa.</QueryName> <!--Design decision to not log reverse DNS lookups. You will need to decide.-->
@@ -1509,7 +1509,7 @@
 			<QueryName condition="is">status.thawte.com</QueryName>
 			<QueryName condition="is">ocsp.int-x3.letsencrypt.org</QueryName>
 		</DnsQuery>
-	</RuleGroup>
+	
 
 	<!--SYSMON EVENT ID 255 : ERROR-->
 		<!--"This event is generated when an error occurred within Sysmon. They can happen if the system is under heavy load
