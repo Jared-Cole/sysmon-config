@@ -1066,11 +1066,10 @@
 			<TargetFilename condition="end with">.vbs</TargetFilename> <!--VisualBasicScripting files-->
 		</FileCreateStreamHash>
 
-	<RuleGroup name="" groupRelation="or">
+	
 		<FileCreateStreamHash onmatch="exclude">
 		</FileCreateStreamHash>
-	</RuleGroup>
-
+	
 	<!--SYSMON EVENT ID 16 : SYSMON CONFIGURATION CHANGE-->
 		<!--EVENT 16: "Sysmon config state changed"-->
 		<!--COMMENT:	This ONLY logs if the hash of the configuration changes. Running "sysmon.exe -c" with the current configuration will not be logged with Event 16-->
@@ -1086,11 +1085,186 @@
 		<!--ADDITIONAL REFERENCE: [ https://blog.cobaltstrike.com/2015/10/07/named-pipe-pivoting/ ] -->
 
 		<!--DATA: UtcTime, ProcessGuid, ProcessId, PipeName, Image-->
-	<RuleGroup name="" groupRelation="or">
+	
 		<PipeEvent onmatch="include">
 			<!--NOTE: Using incide with no rules means nothing in this section will be logged-->
+			<PipeName name="MitreRef=T1055,Technique=Process Injection" condition="contains">\isapi_http</PipeName><!-- Credits @Cyb3rops & @olafhartong-->
+			<PipeName name="MitreRef=T1055,Technique=Process Injection" condition="contains">\isapi_dg</PipeName><!-- Credits @Cyb3rops & @olafhartong-->
+			<PipeName name="MitreRef=T1055,Technique=Process Injection" condition="contains">\isapi_dg2</PipeName><!-- Credits @Cyb3rops & @olafhartong -->
+			<PipeName name="MitreRef=T1055,Technique=Process Injection" condition="contains">\isapi_http</PipeName><!-- Credits @Cyb3rops & @olafhartong -->
+			<PipeName name="MitreRef=T1055,Technique=Process Injection" condition="contains">\sdlrpc</PipeName><!-- Credits @Cyb3rops & @olafhartong -->
+			<PipeName name="MitreRef=T1055,Technique=Process Injection" condition="contains">\ahexec</PipeName><!-- Credits @Cyb3rops & @olafhartong -->
+			<PipeName name="MitreRef=T1055,Technique=Process Injection" condition="contains">\winsession</PipeName><!-- Credits @Cyb3rops & @olafhartong -->
+			<PipeName name="MitreRef=T1055,Technique=Process Injection" condition="contains">\lsassw</PipeName><!-- Credits @Cyb3rops & @olafhartong -->
+			<PipeName name="MitreRef=T1055,Technique=Process Injection" condition="contains">\46a676ab7f179e511e30dd2dc41bd388</PipeName><!-- Credits @Cyb3rops & @olafhartong -->
+			<PipeName name="MitreRef=T1055,Technique=Process Injection" condition="contains">\9f81f59bc58452127884ce513865ed20</PipeName><!-- Credits @Cyb3rops & @olafhartong -->
+			<PipeName name="MitreRef=T1055,Technique=Process Injection" condition="contains">\e710f28d59aa529d6792ca6ff0ca1b34</PipeName><!-- Credits @Cyb3rops & @olafhartong -->
+			<PipeName name="MitreRef=T1055,Technique=Process Injection" condition="contains">\rpchlp_3</PipeName><!-- Credits @Cyb3rops & @olafhartong -->
+			<PipeName name="MitreRef=T1055,Technique=Process Injection" condition="contains">\NamePipe_MoreWindows</PipeName><!-- Credits @Cyb3rops & @olafhartong -->
+			<PipeName name="MitreRef=T1055,Technique=Process Injection" condition="contains">\pcheap_reuse</PipeName><!-- Credits @Cyb3rops & @olafhartong -->
+			<PipeName condition="contains">\</PipeName><!--Include Everything else to mark above rules-->
 		</PipeEvent>
-	</RuleGroup>
+		<PipeEvent onmatch="exclude">
+		<!--COMMENT: Exclude known-good pipe users-->
+				<!--ADDITIONAL REFERENCE: [ https://www.cobaltstrike.com/help-smb-beacon ] -->
+				<!--ADDITIONAL REFERENCE: [ https://blog.cobaltstrike.com/2015/10/07/named-pipe-pivoting/ ] -->
+			<!--SECTION: Microsoft-->
+			<PipeName condition="contains">lsass</PipeName>
+			<PipeName condition="is">\SQLLocal\RTCLOCAL</PipeName>
+			<PipeName condition="is">\spoolss</PipeName>
+			<!--SECTION: Microsoft IIS -->
+			<PipeName condition="begin with">\M.E.C.Core.WinRMDataCommunicator.NamedPipe.</PipeName>
+			<Image condition="is">c:\windows\system32\inetsrv\w3wp.exe</Image>
+			<Image condition="is">C:\Windows\syswow64\snmp.exe</Image>
+			<Image condition="is">C:\Program Files\Common Files\Microsoft Shared\Web Server Extensions\15\BIN\OWSTIMER.EXE</Image>
+			<!--SECTION: Microsoft Exchange Server -->
+			<Image condition="contains">Exchange Server</Image>
+			<!--SECTION: Microsoft DNS Server -->
+			<Image condition="is">C:\Windows\system32\dns.exe</Image>
+			<!--SECTION: Microsoft SQL Server -->
+			<PipeName condition="is">\sql\query</PipeName>
+			<Image condition="is">C:\Program Files\Microsoft SQL Server\90\Shared\sqlwriter.exe</Image>
+			<!--SECTION: Microsoft Skype For Business Server -->
+			<Image condition="is">C:\Program Files\Skype for Business Server 2015\Server\Core\RtcHost.exee</Image>
+			<Image condition="is">C:\Program Files\Skype for Business Server 2015\OCSMCU\AV Conferencing\AVMCUSvc.exe</Image>
+			<Image condition="is">C:\Program Files\Skype for Business Server 2015\Server\Health Agent\HealthAgent.exe</Image>
+			<Image condition="is">C:\Program Files\Skype for Business Server 2015\Server\Core\LysSvc.exe</Image>
+			<Image condition="is">C:\Program Files\Skype for Business Server 2015\File Transfer Agent\FileTransferAgent.exe</Image>
+			<Image condition="is">C:\Program Files\Skype for Business Server 2015\Web Conferencing\DataMCUSvc.exe</Image>
+			<Image condition="is">C:\Program Files\Skype for Business Server 2015\Application Host\OcsAppServerHost.exe</Image>
+			<Image condition="is">C:\Program Files\Skype for Business Server 2015\Server\Core\ABServer.exe</Image>
+			<Image condition="is">C:\Program Files\Skype for Business Server 2015\Master Replicator Agent\MasterReplicatorAgent.exe</Image>
+			<Image condition="is">C:\Program Files\Skype for Business Server 2015\OCSMCU\IM Conferencing\IMMCUSvc.exe</Image>
+			<Image condition="is">C:\Program Files\Common Files\Skype for Business Server 2015\ClsAgent\ClsAgent.exe</Image>
+			<Image condition="is">C:\Program Files\Skype for Business Server 2015\Server\Core\ReplicationApp.exe</Image>
+			<Image condition="is">C:\Program Files\Skype for Business Server 2015\OCSMCU\Application Sharing\ASMCUSvc.exe</Image>
+			<Image condition="is">C:\Program Files\Skype for Business Server 2015\Server\Replica Replicator Agent\ReplicaReplicatorAgent.exe</Image>
+			<Image condition="is">C:\Program Files\Skype for Business Server 2015\Server\Core\RtcHost.exe</Image>
+			<!--SECTION: Microsoft DFS Replication -->
+			<Image condition="is">C:\Windows\system32\DFSRs.exee</Image>
+			<Image condition="begin with">C:\Windows\SystemApps\Microsoft.Windows</Image>
+			<Image condition="is">C:\Windows\system32\SearchProtocolHost.exe</Image>
+			<Image condition="is">C:\Windows\Microsoft.NET\Framework\v4.0.30319\ngen.exe</Image>
+			<Image condition="is">C:\Windows\Microsoft.NET\Framework64\v4.0.30319\ngen.exe</Image>
+			<Image condition="is">C:\Windows\System32\LxRun.exe</Image> <!--Bash On Windows -->
+			<PipeName condition="contains">vmware-</PipeName>
+			<Image condition="is">\System</Image>
+			<PipeName condition="is">\InitShutdown</PipeName>
+			<Image condition="is">C:\Windows\System32\wininit.exe</Image>
+			<Image condition="is">C:\Windows\System32\SearchIndexer.exe</Image>
+			<Image condition="is">C:\Windows\System32\services.exe</Image>
+			<PipeName condition="is">\ntsvcs</PipeName>
+			<PipeName condition="is">\scerpc</PipeName>
+			<Image condition="is">C:\Windows\SystemApps\ShellExperienceHost_cw5n1h2txyewy\ShellExperienceHost.exe</Image>
+			<Image condition="is">C:\Windows\System32\smss.exe</Image>
+			<Image condition="is">C:\Windows\System32\spoolsv.exe</Image>
+			<PipeName condition="is">\epmapper</PipeName>
+			<PipeName condition="is">\atsvc</PipeName>
+			<PipeName condition="is">\browser</PipeName>
+			<PipeName condition="is">\srvsvc</PipeName>
+			<PipeName condition="is">\Winsock2CatelogChangeListener</PipeName>
+			<PipeName condition="contains">ProtectedPrefix\LocalService\FTHPIPE</PipeName>
+			<PipeName condition="is">\W32TIME_ALT</PipeName>
+			<PipeName condition="is">\eventlog</PipeName>
+			<PipeName condition="is">\wkssvc</PipeName>
+			<PipeName condition="contains">\TDLN-</PipeName>
+			<PipeName condition="is">\WiFiNetworkManagerTask</PipeName>
+			<PipeName condition="is">\MsFteWds</PipeName>
+			<!--SECTION: Webroot-->
+			<PipeName condition="is">\WRSVCPipe</PipeName>
+			<PipeName condition="is">\WRSynUM2</PipeName>
+			<PipeName condition="is">\wrUrl</PipeName><!--Webroot Webfiltering Pipe-->
+			<Image condition="is">C:\Program Files (x86)\Webroot\WRSA.exe</Image>
+			<!--SECTION: Google-->
+			<Image condition="is">C:\Program Files (x86)\Google\Chrome\Application\chrome.exe</Image>
+			<Image condition="is">C:\Program Files (x86)\Google\Update\GoogleUpdate.exe</Image>
+			<Image condition="contains">AppData\Local\Google\Chrome\User Data\SwReporter\</Image>
+			<PipeName condition="contains">mojo.</PipeName>
+			<PipeName condition="contains">crashpad_</PipeName>
+			<PipeName condition="contains">chrome.</PipeName>
+			<PipeName condition="contains">GoogleCrashServices</PipeName>
+			<!--SECTION: Other-->
+			<Image condition="end with">slack.exe</Image>
+			<!--SECTION: ConnectWise-->
+			<PipeName condition="contains">booma\</PipeName>
+			<!--SECTION: EnPass-->
+			<PipeName condition="contains">qtsingleapp-enpass-</PipeName>
+			<Image condition="contains">qtsingleapp-enpass-</Image>
+			<!--SECTION: RoyalTS-->
+			<PipeName condition="contains">eo.ipc.</PipeName>
+			<!--SECTION: Windows Firewall Control-->
+			<Image condition="is">C:\Program Files\Windows Firewall Control\wfc.exe</Image>
+			<!--SECTION: Everything Search-->
+			<PipeName condition="contains">Everything Service</PipeName>
+			<PipeName condition="contains">anchor_gui_agent</PipeName>
+			<!--SECTION: Adobe-->
+			<Image condition="end with">Adobe\ARM\1.0\AdobeARM.exe</Image>
+			<!--SECTION: Lenovo-->
+			<Image condition="is">C:\Program Files (x86)\Lenovo\System Update\SUService.exe</Image>
+			<Image condition="is">C:\Program Files\Common Files\VMware\DeviceRedirectionCommon\ftnlsv.exe</Image>
+			<Image condition="is">C:\Program Files\Lenovo\ImController\Service\Lenovo.Modern.ImController.exe</Image>
+			<Image condition="is">C:\Program Files\Lenovo\HOTKEY\shtctky.exe</Image>
+			<Image condition="is">C:\PROGRA~1\Lenovo\HOTKEY\SHTCTKY.EXE</Image>
+			<Image condition="is">C:\Windows\System32\LPlatSvc.exe</Image>
+			<Image condition="is">C:\PROGRA~1\Lenovo\HOTKEY\TPOSD.EXE</Image>
+			<Image condition="is">C:\Program Files (x86)\Lenovo\iMController\PluginHost\Lenovo.Modern.ImController.PluginHost.Device.exe</Image>
+			<Image condition="is">C:\Program Files (x86)\Lenovo\System Update\TvsuCommandLauncher.exe</Image>
+			<!--SECTION: Fortinet-->
+			<Image condition="is">C:\Program Files (x86)\Fortinet\FortiClient\FortiSSLVPNdaemon.exe</Image>
+			<!--SECTION: Sophos VPN Client-->
+			<Image condition="is">c:\program files (x86)\sophos\sophos ssl vpn client\bin\openvpnserv.exe</Image>
+			<!--SECTION: Labtech-->
+			<Image condition="contains">ScreenConnect.WindowsClient.exe</Image>
+			<Image condition="contains">ScreenConnect.ClientService.exe</Image>
+			<!--SECTION: N-Able -->
+			<Image condition="end with">N-able Technologies\Windows Agent\bin\agent.exe</Image>
+			<Image condition="end with">N-able Technologies\AVDefender\EPIntegrationService.exe</Image>
+			<Image condition="is">C:\Program Files\OpenVPN\bin\openvpn-gui.exe</Image>
+			<Image condition="is">C:\Program Files\OpenVPN\bin\openvpn.exe</Image>
+			<Image condition="is">C:\Program Files\OpenVPN\bin\openvpnserv.exe</Image>
+			<Image condition="is">C:\Program Files\Synaptics\SynTP\SynTPEnh.exe</Image>
+			<Image condition="is">C:\Program Files\Synaptics\SynTP\SynTPEnhService.exe</Image>
+			<Image condition="is">C:\Program Files\Lenovo\HOTKEY\tphkload.exe</Image>
+			<Image condition="contains">C:\Program Files\Lenovo\</Image>
+			<Image condition="is">C:\Program Files (x86)\Common Files\VMware\SerialPortRedirection\Client\vmwsprrdpwks.exe</Image>
+			<Image condition="contains">Graylog-collector-sidecar.exe</Image>
+			<Image condition="is">C:\Program Files (x86)\SmartGit\git\mingw32\libexec\git-core\git-remote-https.exe</Image>
+			<Image condition="is">C:\Program Files (x86)\SmartGit\git\mingw32\bin\git.exe</Image>
+			<Image condition="is">C:\Program Files (x86)\SmartGit\git\mingw32\libexec\git-core\git.exe</Image>
+			<Image condition="is">C:\Program Files (x86)\SmartGit\bin\smartgit.exe</Image>
+			<Image condition="is">C:\Program Files (x86)\Fortinet\FortiClient\FortiESNAC.exe</Image>
+			<Image condition="is">C:\Program Files (x86)\Fortinet\FortiClient\update_task.exe</Image>
+			<Image condition="is">C:\Program Files (x86)\Fortinet\FortiClient\FortiTray.exe</Image>
+			<Image condition="is">C:\Program Files (x86)\Fortinet\FortiClient\FCDBLog.exe</Image>
+			<Image condition="is">C:\Program Files (x86)\Enpass\Enpass.exe</Image>
+			<Image condition="is">C:\Program Files (x86)\VMware\VMware Horizon View Client\vmware-view.exe</Image>
+			<Image condition="is">C:\Program Files (x86)\VMware\ScannerRedirection\ftscanmgrhv.exe</Image>
+			<Image condition="is">C:\Program Files (x86)\VMware\Infrastructure\Virtual Infrastructure Client\Launcher\VpxClient.exe</Image>
+			<Image condition="is">C:\Program Files (x86)\Common Files\VMware\VMware Remote Console Plug-in 5.5\Internet Explorer\vmware-vmrc.exe</Image>
+			<PipeName condition="contains">SQLAnywhereLRM</PipeName> <!-- Quickbooks -->
+			<PipeName condition="contains">pgsignal</PipeName> <!-- Postgres SQL -->
+			<Image condition="is">postgres.exe</Image>
+			<PipeName condition="contains">MICROSOFT##WID\tsql\query</PipeName> <!-- Microsoft SQL writer-->
+			<PipeName condition="contains">TSVCPIPE-</PipeName> <!-- Terminal Services Pipe-->
+			<PipeName condition="contains">BB4BB19A178C25D1</PipeName>
+			<PipeName condition="contains">SQLAnywhereLRM</PipeName>
+			<PipeName condition="contains">SQLLocal</PipeName>
+			<PipeName condition="contains">DropboxPipe_</PipeName>
+			<Image condition="is">c:\windows\system32\inetsrv\w3wp.exe</Image>
+			<Image condition="is">C:\Program Files (x86)\Common Files\SafeNet Sentinel\Sentinel RMS License Manager\WinNT\mfcesd.exe</Image>
+			<Image condition="is">C:\Pfx Engagement\WM\PFXEngagement.exe</Image>
+			<Image condition="is">C:\Pfx Engagement\WM\Pfx.KnowledgeCoach.SharedServices.exe</Image>
+			<Image condition="is">C:\Program Files (x86)\Micro Focus\COBOL Server 2012\bin\mfds.exe</Image>
+			<Image condition="is">ScreenConnect.WindowsClient.exe</Image>
+			<Image condition="is">ScreenConnect.ClientService.exe</Image>
+			<Image condition="is">QBW32.EXE</Image>
+			<Image condition="end with">EXCEL.EXE</Image>
+			<Image condition="end with">ADCUpdate.exe</Image>
+			<Image condition="end with">Hydrous.Host.exe</Image>
+			<Image condition="end with">TNSLSNR.exe</Image>
+			<Image condition="contains">ShoreWare Server</Image>
+		</PipeEvent>
+	
 
 	<!--SYSMON EVENT ID 19 & 20 & 21 : WMI EVENT MONITORING [WmiEvent]-->
 		<!--EVENT 19: "WmiEventFilter activity detected"-->
