@@ -539,6 +539,9 @@
 			<Signature condition="contains">microsoft</Signature> <!--Exclude signed Microsoft drivers-->
 			<Signature condition="contains">windows</Signature> <!--Exclude signed Microsoft drivers-->
 			<Signature condition="begin with">Intel </Signature> <!--Exclude signed Intel drivers-->
+			<Signature condition="contains">Broadcom</Signature> <!--Exclude signed Broadcom drivers-->
+			<Signature condition="is">Microsoft Windows</Signature> <!--Exclude signed Microsoft drivers-->
+			<Signature condition="contains">Nvidia</Signature> <!--Exclude signed Nvidia drivers-->
 		</DriverLoad>
 	</RuleGroup>
 
