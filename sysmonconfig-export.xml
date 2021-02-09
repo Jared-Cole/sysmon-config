@@ -184,9 +184,45 @@
 			<CommandLine name="MitreRef=T1001,Technique=Data Obfuscation,Tactic=Command And Control" condition="contains">-en</CommandLine>
 			<CommandLine name="MitreRef=T1001,Technique=Data Obfuscation,Tactic=Command And Control,Alert=Hacking" condition="contains">^c^o^m^S^p^E^c^</CommandLine>
 			<CommandLine name="MitreRef=T1001,Technique=Data Obfuscation,Tactic=Command And Control,Alert=Hacking" condition="contains">C^om^S^pEc</CommandLine>
-
+			<CommandLine name="Alert=Malicious Keywords from Exploitation Frameworks,Tactic=Privilege Escalation" condition="contains">AdjustTokenPrivileges</CommandLine>
+			<CommandLine name="Alert=Malicious Keywords from Exploitation Frameworks,Tactic=Privilege Escalation" condition="contains">IMAGE_NT_OPTIONAL_HDR64_MAGIC</CommandLine>
+			<CommandLine name="Alert=Malicious Keywords from Exploitation Frameworks,Tactic=Privilege Escalation" condition="contains">Management.Automation.RuntimeException</CommandLine>
+			<CommandLine name="Alert=Malicious Keywords from Exploitation Frameworks,Tactic=Privilege Escalation" condition="contains">Microsoft.Win32.UnsafeNativeMethods</CommandLine>
+			<CommandLine name="Alert=Malicious Keywords from Exploitation Frameworks,Tactic=Privilege Escalation" condition="contains">ReadProcessMemory.Invoke</CommandLine>
+			<CommandLine name="Alert=Malicious Keywords from Exploitation Frameworks,Tactic=Privilege Escalation" condition="contains">Runtime.InteropServices</CommandLine>
+			<CommandLine name="Alert=Malicious Keywords from Exploitation Frameworks,Tactic=Privilege Escalation" condition="contains">SE_PRIVILEGE_ENABLED</CommandLine>
+			<CommandLine name="Alert=Malicious Keywords from Exploitation Frameworks,Tactic=Privilege Escalation" condition="contains">System.Security.Cryptography</CommandLine>
+			<CommandLine name="Alert=Malicious Keywords from Exploitation Frameworks,Tactic=Privilege Escalation" condition="contains">System.Runtime.InteropServices</CommandLine>
+			<CommandLine name="Alert=Malicious Keywords from Exploitation Frameworks,Tactic=Privilege Escalation" condition="contains">LSA_UNICODE_STRING</CommandLine>
+			<CommandLine name="Alert=Malicious Keywords from Exploitation Frameworks,Tactic=Privilege Escalation" condition="contains">MiniDumpWriteDump</CommandLine>
+			<CommandLine name="Alert=Malicious Keywords from Exploitation Frameworks,Tactic=Privilege Escalation" condition="contains">PAGE_EXECUTE_READ</CommandLine>
+			<CommandLine name="Alert=Malicious Keywords from Exploitation Frameworks,Tactic=Privilege Escalation" condition="contains">Net.Sockets.SocketFlags</CommandLine>
+			<CommandLine name="Alert=Malicious Keywords from Exploitation Frameworks,Tactic=Privilege Escalation" condition="contains">Reflection.Assembly</CommandLine>
+			<CommandLine name="Alert=Malicious Keywords from Exploitation Frameworks,Tactic=Privilege Escalation" condition="contains">SECURITY_DELEGATION</CommandLine>
+			<CommandLine name="Alert=Malicious Keywords from Exploitation Frameworks,Tactic=Privilege Escalation" condition="contains">TOKEN_ADJUST_PRIVILEGES</CommandLine>
+			<CommandLine name="Alert=Malicious Keywords from Exploitation Frameworks,Tactic=Privilege Escalation" condition="contains">TOKEN_ALL_ACCESS</CommandLine>
+			<CommandLine name="Alert=Malicious Keywords from Exploitation Frameworks,Tactic=Privilege Escalation" condition="contains">TOKEN_ASSIGN_PRIMARY</CommandLine>
+			<CommandLine name="Alert=Malicious Keywords from Exploitation Frameworks,Tactic=Privilege Escalation" condition="contains">TOKEN_DUPLICATE</CommandLine>
+			<CommandLine name="Alert=Malicious Keywords from Exploitation Frameworks,Tactic=Privilege Escalation" condition="contains">TOKEN_ELEVATION</CommandLine>
+			<CommandLine name="Alert=Malicious Keywords from Exploitation Frameworks,Tactic=Privilege Escalation" condition="contains">TOKEN_IMPERSONATE</CommandLine>
+			<CommandLine name="Alert=Malicious Keywords from Exploitation Frameworks,Tactic=Privilege Escalation" condition="contains">TOKEN_INFORMATION_CLASS</CommandLine>
+			<CommandLine name="Alert=Malicious Keywords from Exploitation Frameworks,Tactic=Privilege Escalation" condition="contains">TOKEN_PRIVILEGES</CommandLine>
+			<CommandLine name="Alert=Malicious Keywords from Exploitation Frameworks,Tactic=Privilege Escalation" condition="contains">TOKEN_QUERY</CommandLine>
+			<CommandLine name="Alert=Malicious Keywords from Exploitation Frameworks,Tactic=Privilege Escalation" condition="contains">Metasploit</CommandLine>
+			<CommandLine name="Alert=Malicious Keywords from Exploitation Frameworks,Tactic=Privilege Escalation" condition="contains">Mimikatz</CommandLine>
+			<!--Include Everything last to allow rules to apply and to allow previous exclude ruleset to function-->
+			<CommandLine name="Note=Windows Firewall Modifications" condition="contains">netsh advfirewall firewall</CommandLine>
+			<Image condition="contains">\</Image>
+			<CommandLine name="Alert=Windows Defender Disabled" condition="contains">DisableRealtimeMonitoring </CommandLine>
+			<CommandLine name="Alert=Ramnit Banker Malware!" condition="contains">--disable-http2 --disable-quic</CommandLine>
+			<Hashes name="Alert=Ramnit Banker Malware!" condition="contains">291ff87948e45914424cec9510c297da</Hashes><!--Ramnit Banker Malware: https://www.virustotal.com/#/file/7f054300fa64e7bcdec7f5538876e6008d6164f21ff21c6375e36dfe04a63412/details-->
+			<Hashes name="Alert=Ramnit Banker Malware!" condition="contains">304772c80b157a916c7041f2f15939fb</Hashes><!--Ramnit Banker Malware: https://www.virustotal.com/#/file/7f054300fa64e7bcdec7f5538876e6008d6164f21ff21c6375e36dfe04a63412/details-->
+			<Hashes name="Alert=Docusign Spam/Phishing!" condition="contains">5E022694C0DBD1FBBC263D608E577949</Hashes><!--Docusign Spam:https://www.vkremez.com/2018/03/malware-spam-internals-docusign-spam.html -->
+			<Hashes name="Alert=Gootkit Banker Malware!" condition="contains">71345b139166482acaa568ac8816c7bc</Hashes><!--Malware Traffic Internals: BlackTDS Leads to Gootkit Banking Malware Distribution: https://www.vkremez.com/2018/03/3-29-2018-malware-traffic-internals.html-->
+			<Hashes name="Alert=Gootkit Banker Malware!" condition="contains">1b60021baedc3f9201bcdb40e9b87f62</Hashes><!--Malware Traffic Internals: BlackTDS Leads to Gootkit Banking Malware Distribution: https://www.vkremez.com/2018/03/3-29-2018-malware-traffic-internals.html-->
+			<Hashes name="Alert=Gootkit Banker Malware!" condition="contains">c7c8d584758854bbe0d8e64ef53ae1a8</Hashes><!--Malware Traffic Internals: BlackTDS Leads to Gootkit Banking Malware Distribution: https://www.vkremez.com/2018/03/3-29-2018-malware-traffic-internals.html-->
 		</ProcessCreate>
-	<RuleGroup name="" groupRelation="or">
+	
 		<ProcessCreate onmatch="exclude">
 			<!--SECTION: Microsoft Windows-->
 			<CommandLine condition="begin with"> "C:\Windows\system32\wermgr.exe" "-queuereporting_svc" </CommandLine> <!--Windows:Windows error reporting/telemetry-->
@@ -332,7 +368,7 @@
 			<CommandLine condition="begin with">"C:\Program Files\Google\Chrome\Application\chrome.exe" --type=</CommandLine> <!--Google:Chrome: massive command-line arguments-->
 			
 		</ProcessCreate>
-	</RuleGroup>
+	
 	
 	<!--SYSMON EVENT ID 2 : FILE CREATION TIME RETROACTIVELY CHANGED IN THE FILESYSTEM [FileCreateTime]-->
 		<!--COMMENT:	[ https://attack.mitre.org/wiki/Technique/T1099 ] -->
@@ -640,9 +676,13 @@
 	<!--SYSMON EVENT ID 8 : REMOTE THREAD CREATED [CreateRemoteThread]-->
 		<!--COMMENT:	Monitor for processes injecting code into other processes. Often used by malware to cloak their actions. Also when Firefox loads Flash.
 		[ https://attack.mitre.org/wiki/Technique/T1055 ] -->
-
+		<CreateRemoteThread onmatch="include">
+			<StartFunction name="MitreRef=T1055,Technique=DLL Injection via LoadLibrary API Call,Tactic=Defense Evasion,Alert=DLL Injection via LoadLibrary API Call" condition="contains">LoadLibrary</StartFunction>
+			<SourceImage condition="contains">\</SourceImage>
+			<StartAddress name="Alert=Cobalt Strike Detected!"  condition="end with">0B80</StartAddress>
+		</CreateRemoteThread>
 		<!--DATA: UtcTime, SourceProcessGuid, SourceProcessId, SourceImage, TargetProcessId, TargetImage, NewThreadId, StartAddress, StartModule, StartFunction-->
-	<RuleGroup name="" groupRelation="or">
+	
 		<CreateRemoteThread onmatch="exclude">
 			<!--COMMENT: Exclude mostly-safe sources and log anything else.-->
 			<SourceImage condition="is">C:\Windows\system32\wbem\WmiPrvSE.exe</SourceImage>
@@ -654,8 +694,10 @@
 			<SourceImage condition="is">C:\Windows\system32\audiodg.exe</SourceImage>
 			<StartModule condition="is">C:\Windows\system32\kernel32.dll</StartModule>
 			<TargetImage condition="is">C:\Program Files (x86)\Google\Chrome\Application\chrome.exe</TargetImage>
+			<SourceImage condition="is">C:\Windows\sysmon64.exe</SourceImage>
+			<SourceImage condition="is">C:\Windows\sysmon.exe</SourceImage>
 		</CreateRemoteThread>
-	</RuleGroup>
+	
 
 	<!--SYSMON EVENT ID 9 : RAW DISK ACCESS [RawAccessRead]-->
 		<!--EVENT 9: "RawAccessRead detected"-->
