@@ -550,11 +550,92 @@
 		<!--COMMENT:	[ https://attack.mitre.org/wiki/Technique/T1073 ] [ https://attack.mitre.org/wiki/Technique/T1038 ] [ https://attack.mitre.org/wiki/Technique/T1034 ] -->
 
 		<!--DATA: UtcTime, ProcessGuid, ProcessId, Image, ImageLoaded, Hashes, Signed, Signature, SignatureStatus-->
-	<RuleGroup name="" groupRelation="or">
+	
 		<ImageLoad onmatch="include">
 			<!--NOTE: Using "include" with no rules means nothing in this section will be logged-->
+			<Signed condition="is">false</Signed> <!-- Lets Only show Unsigned DLL's loaded-->
+			<SignatureStatus condition="is">Invalid</SignatureStatus> <!--Lets Show DLL's where their Signature's are Invalid-->
+			<SignatureStatus condition="is">Unavailable</SignatureStatus> <!--Lets Show DLL's where their Signature's are Invalid-->
+			<ImageLoaded condition="contains">C:\windows\system32\fxsst.dll</ImageLoaded> <!-- CIA Vault7 Leak: Fax DLL Injection -->
+			<ImageLoaded condition="contains">C:\Windows\System32\wbem\oci.dll</ImageLoaded> <!-- CIA Vault7 Leak: Distributed Transaction Coordinator DLL Injection -->
+			<ImageLoaded condition="contains">\Temp\</ImageLoaded>
+			<ImageLoaded name="MitreRef=T1128,Technique=Netsh Helper Beacon DLL,Tactic=Persistence,Alert=Cobalt Strike Netsh Helper Beacon" condition="contains">NetshHelperBeacon</ImageLoaded>
+			<Image name="MitreRef=T1128,Technique=Netsh Helper Beacon DLL,Tactic=Persistence" condition="contains">netsh.exe</Image>
+			<ImageLoaded name="Alert=Ramnit Banker Malware!" condition="contains">rmnsoft.dll</ImageLoaded>
 		</ImageLoad>
-	</RuleGroup>
+		<ImageLoad onmatch="exclude">
+			<SignatureStatus condition="is">Valid</SignatureStatus>
+			<ImageLoaded condition="end with">System32\samlib.dll</ImageLoaded> <!-- Spam -->
+			<ImageLoaded condition="end with">System32\cryptdll.dlll</ImageLoaded> <!-- Spam -->
+			<Signature condition="contains">microsoft</Signature> <!--Exclude signed Microsoft libraries-->
+			<Signature condition="is">Microsoft Windows</Signature> <!--Exclude signed Microsoft libraries-->
+			<Signature condition="contains">windows</Signature> <!--Exclude signed Microsoft libraries-->
+			<Signature condition="begin with">Intel</Signature> <!--Exclude signed Intel libraries-->
+			<Signature condition="contains">Synaptic</Signature> <!--Exclude signed Synaptic libraries-->
+			<Signature condition="contains">Nvidia</Signature> <!--Exclude signed Nvidia libraries-->
+			<Signature condition="contains">Broadcom</Signature> <!--Exclude signed Broadcom libraries-->
+			<Signature condition="contains">Realtek</Signature> <!--Exclude signed Realtek libraries-->
+			<Company condition="contains">Microsoft</Company>
+			<Product condition="contains">Microsoft</Product>
+			<Image condition="is">C:\Windows\System32\backgroundTaskHost.exe</Image>
+			<Signature condition="contains">Webroot</Signature> <!--Exclude signed MSI libraries-->
+			<Image condition="is">C:\Windows\System32\backgroundTaskHost.exe</Image>
+			<Image condition="is">C:\Windows\System32\mmc.exe</Image>
+			<Image condition="is">C:\Windows\System32\SearchFilterHost.exe</Image>
+			<Image condition="is">C:\Windows\System32\SearchProtocolHost.exe</Image>
+			<Image condition="is">C:\Windows\sysmon64.exe</Image>
+			<Image condition="is">C:\Windows\System32\inetsrv\w3wp.exe</Image>
+			<ImageLoaded condition="is">C:\Windows\sysmon64.exe</ImageLoaded>
+			<ImageLoaded condition="is">C:\Windows\System32\conhost.exe</ImageLoaded>
+			<ImageLoaded condition="is">C:\Windows\System32\winspool.drv</ImageLoaded>
+			<ImageLoaded condition="is">C:\Windows\System32\wshqos.</ImageLoaded>
+			<ImageLoaded condition="is">C:\Windows\System32\wow64.dll</ImageLoaded>
+			<ImageLoaded condition="is">C:\Windows\System32\clusapi.dll</ImageLoaded>
+			<ImageLoaded condition="is">C:\Windows\System32\cryptdll.dll</ImageLoaded>
+			<ImageLoaded condition="is">C:\Windows\System32\wow64win.dll</ImageLoaded>
+			<ImageLoaded condition="is">C:\Windows\System32\wow64.dll</ImageLoaded>
+			<ImageLoaded condition="is">C:\Windows\System32\pcwum.dll</ImageLoaded>
+			<ImageLoaded condition="is">C:\Windows\System32\kernel32.dll</ImageLoaded>
+			<ImageLoaded condition="is">C:\Windows\System32\user32.dll</ImageLoaded>
+			<ImageLoaded condition="is">C:\Windows\System32\cryptdll.dll</ImageLoaded>
+			<ImageLoaded condition="is">C:\Windows\System32\dns.exe</ImageLoaded>
+			<ImageLoaded condition="is">C:\Windows\System32\zvprtmon5.dll</ImageLoaded>
+			<ImageLoaded condition="is">C:\Windows\System32\termsrv.dll</ImageLoaded>
+			<ImageLoaded condition="begin with">C:\Windows\System32\spool\</ImageLoaded>
+			<ImageLoaded condition="end with">samlib.dll</ImageLoaded>
+			<ImageLoaded condition="contains">C:\Program Files (x86)\SmartGit</ImageLoaded> <!--SmartGit-->
+			<ImageLoaded condition="contains">syntevo\SmartGit</ImageLoaded> <!--SmartGit-->
+			<ImageLoaded condition="is">C:\Program Files\Microsoft SQL Server\100\Shared\dbghelp.dll</ImageLoaded>
+			<Image condition="is">C:\Windows\System32\backgroundTaskHost.exe</Image> <!-- Windows Store apps unsigned -->
+			<Image condition="is">C:\Program Files (x86)\VMware\Infrastructure\Virtual Infrastructure Client\Launcher\VpxClient.exe</Image>
+			<Image condition="begin with">C:\Program Files</Image> <!-- NOTICE: Not good for security but good on cutting down the noise, we do log dropped dll's -->
+			<ImageLoaded condition="contains">C:\Windows\assembly\NativeImages</ImageLoaded> <!-- Event Viewer -->
+			<ImageLoaded condition="contains">C:\Program Files\WindowsApps</ImageLoaded> <!-- Windows Store Apps: Apparently most dll's here are unsigned and causes noise -->
+			<!-- Custom App Exclusions -->
+			<ImageLoaded condition="is">C:\Program Files (x86)\AutoSizer\AutoSizer.dll</ImageLoaded> <!-- I use autosizer to re-arrange my windows -->
+			<ImageLoaded condition="contains">C:\Program Files (x86)\Notepad++</ImageLoaded> <!--Notepad++ Plugins Are unsigned-->
+			<Image condition="is">C:\Program Files (x86)\SyncedTool\bin\autoupdate.exe</Image> <!-- eFolder SyncedTool -->
+			<Image condition="is">C:\PostgreSQL9.1\bin\postgres.exe</Image> <!-- eFolder Server loading unsigned dll's -->
+			<Image condition="is">C:\Windows\System32\VSSVC.</Image>
+			<Image condition="is">C:\Windows\System32\conhost.exe</Image>
+			<Image condition="is">C:\Windows\System32\svchost.exe</Image>
+			<Image condition="is">C:\Windows\System32\NETSTAT.EXE</Image>
+			<Image condition="is">C:\Windows\System32\inetsrv\w3wp.exe</Image>
+			<Image condition="is">C:\Windows\System32\tasklist.exe</Image>
+			<Image condition="is">C:\Windows\System32\nslookup.exe</Image>
+			<Image condition="is">C:\Windows\System32\find.exe</Image>
+			<Image condition="is">C:\cs\tools\php\php-cgi.exe</Image>
+			<Image condition="is">C:\Windows\System32\nbtstat.exe</Image>
+			<Image condition="is">C:\Windows\System32\dsquery.exe</Image>
+			<Image condition="is">C:\Windows\System32\netsh.exe</Image>
+			<Image condition="is">C:\Windows\System32\taskeng.exe</Image>
+			<Image condition="is">C:\ProgramData\sysmon\sysmon64.exe</Image>
+			<Image condition="contains">SQL Server</Image>
+			<ImageLoaded condition="contains">SQL Server</ImageLoaded>
+			<Image condition="contains">Exchange Server</Image>
+			<ImageLoaded condition="contains">Exchange Server</ImageLoaded>
+		</ImageLoad>
+	
 
 	<!--SYSMON EVENT ID 8 : REMOTE THREAD CREATED [CreateRemoteThread]-->
 		<!--COMMENT:	Monitor for processes injecting code into other processes. Often used by malware to cloak their actions. Also when Firefox loads Flash.
