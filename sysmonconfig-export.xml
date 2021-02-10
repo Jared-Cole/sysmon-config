@@ -79,7 +79,7 @@
 			code signatures to validate, but Sysmon does not support that. Look into AppLocker/WindowsDeviceGuard for whitelisting support. -->
 
 		<!--DATA: UtcTime, ProcessGuid, ProcessID, Image, FileVersion, Description, Product, Company, CommandLine, CurrentDirectory, User, LogonGuid, LogonId, TerminalSessionId, IntegrityLevel, Hashes, ParentProcessGuid, ParentProcessId, ParentImage, ParentCommandLine, RuleName-->
-		<RuleGroup name="" groupRelation="or">
+	<RuleGroup name="" groupRelation="or">
 			<ProcessCreate onmatch="include">
 				<!--MITRE TACTIC: Defense Evasion-->
 				<ParentImage name="Alert=Unknown Process Execution" condition="contains">unknown process</ParentImage>
@@ -222,8 +222,8 @@
 				<Hashes name="Alert=Gootkit Banker Malware!" condition="contains">1b60021baedc3f9201bcdb40e9b87f62</Hashes><!--Malware Traffic Internals: BlackTDS Leads to Gootkit Banking Malware Distribution: https://www.vkremez.com/2018/03/3-29-2018-malware-traffic-internals.html-->
 				<Hashes name="Alert=Gootkit Banker Malware!" condition="contains">c7c8d584758854bbe0d8e64ef53ae1a8</Hashes><!--Malware Traffic Internals: BlackTDS Leads to Gootkit Banking Malware Distribution: https://www.vkremez.com/2018/03/3-29-2018-malware-traffic-internals.html-->
 			</ProcessCreate>
-		</RuleGroup>
-		<RuleGroup name="" groupRelation="or">	
+	</RuleGroup>
+	<RuleGroup name="" groupRelation="or">	
 			<ProcessCreate onmatch="exclude">
 				<!--SECTION: Microsoft Windows-->
 				<CommandLine condition="begin with"> "C:\Windows\system32\wermgr.exe" "-queuereporting_svc" </CommandLine> <!--Windows:Windows error reporting/telemetry-->
@@ -368,13 +368,13 @@
 				<CommandLine condition="begin with">"C:\Program Files (x86)\Google\Chrome\Application\chrome.exe" --type=</CommandLine> <!--Google:Chrome: massive command-line arguments-->
 				<CommandLine condition="begin with">"C:\Program Files\Google\Chrome\Application\chrome.exe" --type=</CommandLine> <!--Google:Chrome: massive command-line arguments-->
 			</ProcessCreate>
-		</RuleGroup>
+	</RuleGroup>
 	
 	<!--SYSMON EVENT ID 2 : FILE CREATION TIME RETROACTIVELY CHANGED IN THE FILESYSTEM [FileCreateTime]-->
 		<!--COMMENT:	[ https://attack.mitre.org/wiki/Technique/T1099 ] -->
 
 		<!--DATA: UtcTime, ProcessGuid, ProcessId, Image, TargetFilename, CreationUtcTime, PreviousCreationUtcTime-->
-		<RuleGroup name="" groupRelation="or">
+	<RuleGroup name="" groupRelation="or">
 			<FileCreateTime onmatch="include">
 				<Image name="T1099" condition="begin with">C:\Users</Image> <!--Look for timestomping in user area, usually nothing should be doing that here-->
 				<Image name="MitreRef=T1099,Technique=Timestomp,Tactic=Defense Evasion,Alert=Timestomp/File creation time retroactively changed!" condition="begin with">C:\ProgramData</Image> <!--Look for timestomping in user area-->
@@ -382,8 +382,8 @@
 				<TargetFilename name="T1099" condition="end with">.exe</TargetFilename> <!--Look for backdated executables anywhere-->
 				<Image name="T1099" condition="begin with">\Device\HarddiskVolumeShadowCopy</Image> <!--Nothing should be written here | Credit: @SBousseaden [ https://twitter.com/SBousseaden/status/1133030955407630336 ] -->
 			</FileCreateTime>
-		</RuleGroup>
-		<RuleGroup name="" groupRelation="or">
+	</RuleGroup>
+	<RuleGroup name="" groupRelation="or">
 			<FileCreateTime onmatch="exclude">
 				<Image condition="image">OneDrive.exe</Image> <!--OneDrive constantly changes file times-->
 				<Image condition="image">C:\Windows\system32\backgroundTaskHost.exe</Image>
@@ -396,7 +396,7 @@
 				<Image condition="image">chrome.exe</Image> <!--Chrome constantly changes file times-->
 				<TargetFilename condition="contains">\NVIDIA\NvBackend\ApplicationOntology\</TargetFilename> <!--NVIDIA GeForce Experience Application Ontology, 1000's of events in user profile-->
 			</FileCreateTime>
-		</RuleGroup>
+	</RuleGroup>
 	<!--SYSMON EVENT ID 3 : NETWORK CONNECTION INITIATED [NetworkConnect]-->
 		<!--COMMENT:	By default this configuration takes a very conservative approach to network logging, limited to only extremely high-signal events.-->
 		<!--COMMENT:	[ https://attack.mitre.org/wiki/Command_and_Control ] [ https://attack.mitre.org/wiki/Exfiltration ] [ https://attack.mitre.org/wiki/Lateral_Movement ] -->
@@ -405,7 +405,7 @@
 		<!--TECHNICAL:	These exe do not initiate their connections, and thus includes do not work in this section: BITSADMIN NLTEST-->
 		
 		<!-- https://www.first.org/resources/papers/conf2017/APT-Log-Analysis-Tracking-Attack-Tools-by-Audit-Policy-and-Sysmon.pdf -->
-		<RuleGroup name="" groupRelation="or">
+	<RuleGroup name="" groupRelation="or">
 		<!--DATA: UtcTime, ProcessGuid, ProcessId, Image, User, Protocol, Initiated, SourceIsIpv6, SourceIp, SourceHostname, SourcePort, SourcePortName, DestinationIsIpV6, DestinationIp, DestinationHostname, DestinationPort, DestinationPortName-->
 			<NetworkConnect onmatch="include">
 				<!--Suspicious sources for network-connecting binaries-->
@@ -518,8 +518,8 @@
 				<DestinationPort name="Tor" condition="is">9001</DestinationPort> <!--Tor protocol [ http://www.computerworlduk.com/tutorial/security/tor-enterprise-2016-blocking-malware-darknet-use-rogue-nodes-3633907/ ] -->
 				<DestinationPort name="Tor" condition="is">9030</DestinationPort> <!--Tor protocol [ http://www.computerworlduk.com/tutorial/security/tor-enterprise-2016-blocking-malware-darknet-use-rogue-nodes-3633907/ ] -->
 			</NetworkConnect>
-		</RuleGroup>
-		<RuleGroup name="" groupRelation="or">
+	</RuleGroup>
+	<RuleGroup name="" groupRelation="or">
 			<NetworkConnect onmatch="exclude">
 				<!--Alot of room to improve this exclude list JAC-->
 				<!--SECTION: Microsoft-->
@@ -532,7 +532,7 @@
 				<DestinationIp condition="is">127.0.0.1</DestinationIp> <!--Credit @ITProPaul-->
 				<DestinationIp condition="begin with">fe80:0:0:0</DestinationIp> <!--Credit @ITProPaul-->
 			</NetworkConnect>
-		</RuleGroup>
+	</RuleGroup>
 
 	<!--SYSMON EVENT ID 4 : RESERVED FOR SYSMON SERVICE STATUS MESSAGES-->
 
@@ -543,7 +543,7 @@
 		<!--COMMENT:	Useful data in building infection timelines.-->
 
 		<!--DATA: UtcTime, ProcessGuid, ProcessId, Image-->
-		<RuleGroup name="" groupRelation="or">
+	<RuleGroup name="" groupRelation="or">
 			<ProcessTerminate onmatch="include">
 				<Image condition="begin with">C:\Users</Image> <!--Process terminations by user binaries-->
 				<Image condition="begin with">C:\ProgramData</Image> <!--Process terminations by user binaries-->
@@ -552,12 +552,12 @@
 				<Image condition="end with">Sysmon.exe</Image> <!--Detect killing Sysmon, Credit: @vector_sec-->
 				<Image condition="end with">Sysmon64.exe</Image> <!--Detect killing Sysmon, Credit: @vector_sec-->
 			</ProcessTerminate>
-		</RuleGroup>	
+	</RuleGroup>	
 
-		<RuleGroup name="" groupRelation="or">
+	<RuleGroup name="" groupRelation="or">
 			<ProcessTerminate onmatch="exclude">
 			</ProcessTerminate>
-		</RuleGroup>	
+	</RuleGroup>	
 	
 
 	<!--SYSMON EVENT ID 6 : DRIVER LOADED INTO KERNEL [DriverLoad]-->
@@ -565,7 +565,7 @@
 			about what you exclude from monitoring. Low event volume, little incentive to exclude.
 			[ https://attack.mitre.org/wiki/Technique/T1014 ] -->
 		<!--TECHNICAL:	Sysmon will check the signing certificate revocation status of any driver you don't exclude.-->
-		<RuleGroup name="" groupRelation="or">
+	<RuleGroup name="" groupRelation="or">
 		<!--DATA: UtcTime, ImageLoaded, Hashes, Signed, Signature, SignatureStatus-->
 			<DriverLoad onmatch="exclude">
 				<Signature condition="contains">microsoft</Signature> <!--Exclude signed Microsoft drivers-->
@@ -575,13 +575,13 @@
 				<Signature condition="is">Microsoft Windows</Signature> <!--Exclude signed Microsoft drivers-->
 				<Signature condition="contains">Nvidia</Signature> <!--Exclude signed Nvidia drivers-->
 			</DriverLoad>
-		</RuleGroup>
+	</RuleGroup>
 	<!--SYSMON EVENT ID 7 : DLL (IMAGE) LOADED BY PROCESS [ImageLoad]-->
 		<!--COMMENT:	Can cause high system load, disabled by default.-->
 		<!--COMMENT:	[ https://attack.mitre.org/wiki/Technique/T1073 ] [ https://attack.mitre.org/wiki/Technique/T1038 ] [ https://attack.mitre.org/wiki/Technique/T1034 ] -->
 
 		<!--DATA: UtcTime, ProcessGuid, ProcessId, Image, ImageLoaded, Hashes, Signed, Signature, SignatureStatus-->
-		<RuleGroup name="" groupRelation="or">
+	<RuleGroup name="" groupRelation="or">
 			<ImageLoad onmatch="include">
 				<!--NOTE: Using "include" with no rules means nothing in this section will be logged-->
 				<Signed condition="is">false</Signed> <!-- Lets Only show Unsigned DLL's loaded-->
@@ -594,8 +594,8 @@
 				<Image name="MitreRef=T1128,Technique=Netsh Helper Beacon DLL,Tactic=Persistence" condition="contains">netsh.exe</Image>
 				<ImageLoaded name="Alert=Ramnit Banker Malware!" condition="contains">rmnsoft.dll</ImageLoaded>
 			</ImageLoad>
-		<RuleGroup>
-		<RuleGroup name="" groupRelation="or">
+	</RuleGroup>
+	<RuleGroup name="" groupRelation="or">
 			<ImageLoad onmatch="exclude">
 				<SignatureStatus condition="is">Valid</SignatureStatus>
 				<ImageLoaded condition="end with">System32\samlib.dll</ImageLoaded> <!-- Spam -->
@@ -668,20 +668,20 @@
 				<Image condition="contains">Exchange Server</Image>
 				<ImageLoaded condition="contains">Exchange Server</ImageLoaded>
 			</ImageLoad>
-		</RuleGroup>
+	</RuleGroup>
 
 	<!--SYSMON EVENT ID 8 : REMOTE THREAD CREATED [CreateRemoteThread]-->
 		<!--COMMENT:	Monitor for processes injecting code into other processes. Often used by malware to cloak their actions. Also when Firefox loads Flash.
 		[ https://attack.mitre.org/wiki/Technique/T1055 ] -->
-		<RuleGroup name="" groupRelation="or">		
+	<RuleGroup name="" groupRelation="or">		
 			<CreateRemoteThread onmatch="include">
 				<StartFunction name="MitreRef=T1055,Technique=DLL Injection via LoadLibrary API Call,Tactic=Defense Evasion,Alert=DLL Injection via LoadLibrary API Call" condition="contains">LoadLibrary</StartFunction>
 				<SourceImage condition="contains">\</SourceImage>
 				<StartAddress name="Alert=Cobalt Strike Detected!"  condition="end with">0B80</StartAddress>
 			</CreateRemoteThread>
-		</RuleGroup>	
+	</RuleGroup>	
 		<!--DATA: UtcTime, SourceProcessGuid, SourceProcessId, SourceImage, TargetProcessId, TargetImage, NewThreadId, StartAddress, StartModule, StartFunction-->
-		<RuleGroup name="" groupRelation="or">
+	<RuleGroup name="" groupRelation="or">
 			<CreateRemoteThread onmatch="exclude">
 				<!--COMMENT: Exclude mostly-safe sources and log anything else.-->
 				<SourceImage condition="is">C:\Windows\system32\wbem\WmiPrvSE.exe</SourceImage>
@@ -696,7 +696,7 @@
 				<SourceImage condition="is">C:\Windows\sysmon64.exe</SourceImage>
 				<SourceImage condition="is">C:\Windows\sysmon.exe</SourceImage>
 			</CreateRemoteThread>
-		</RuleGroup>
+	</RuleGroup>
 
 	<!--SYSMON EVENT ID 9 : RAW DISK ACCESS [RawAccessRead]-->
 		<!--EVENT 9: "RawAccessRead detected"-->
@@ -707,11 +707,11 @@
 		<!--COMMENT:	You will likely want to set this to a full capture on domain controllers, where no process should be doing raw reads.-->
 
 		<!--DATA: UtcTime, ProcessGuid, ProcessId, Image, Device-->
-		<RuleGroup name="" groupRelation="or">
+	<RuleGroup name="" groupRelation="or">
 			<RawAccessRead onmatch="include">
 				<!--NOTE: Using "include" with no rules means nothing in this section will be logged-->
 			</RawAccessRead>
-		</RuleGroup>
+	</RuleGroup>
 
 	<!--SYSMON EVENT ID 10 : INTER-PROCESS ACCESS [ProcessAccess]-->
 		<!--EVENT 10: "Process accessed"-->
@@ -719,18 +719,18 @@
 		<!--COMMENT:	Monitor for processes accessing other process' memory.-->
 
 		<!--DATA: UtcTime, SourceProcessGuid, SourceProcessId, SourceThreadId, SourceImage, TargetProcessGuid, TargetProcessId, TargetImage, GrantedAccess, CallTrace-->
-		<RuleGroup name="" groupRelation="or">
+	<RuleGroup name="" groupRelation="or">
 			<ProcessAccess onmatch="include">
 				<!--NOTE: Using "include" with no rules means nothing in this section will be logged-->
 			</ProcessAccess>
-		</RuleGroup>
+	</RuleGroup>
 	<!--SYSMON EVENT ID 11 : FILE CREATED [FileCreate]-->
 		<!--EVENT 11: "File created"-->
 		<!--NOTE:	Other filesystem "minifilters" can make it appear to Sysmon that some files are being written twice. This is not a Sysmon issue, per Mark Russinovich.-->
 		<!--NOTE:	You may not see files detected by antivirus. Other filesystem minifilters, like antivirus, can act before Sysmon receives the alert a file was written.-->
 
 		<!--DATA: UtcTime, ProcessGuid, ProcessId, Image, TargetFilename, CreationUtcTime-->
-		<RuleGroup name="" groupRelation="or">
+	<RuleGroup name="" groupRelation="or">
 			<FileCreate onmatch="include">
 				<TargetFilename name="T1023" condition="contains">\Start Menu</TargetFilename> <!--Windows: Startup links and shortcut modification [ https://attack.mitre.org/wiki/Technique/T1023 ] -->
 				<TargetFilename name="T1165" condition="contains">\Startup\</TargetFilename> <!--Microsoft:Changes to user's auto-launched files and shortcuts-->
@@ -783,9 +783,9 @@
 				<TargetFilename condition="end with">.ppt</TargetFilename> <!--Legacy Office files are often used for attacks-->
 				<TargetFilename condition="end with">.rtf</TargetFilename> <!--RTF files often 0day malware vectors when opened by Office-->
 			</FileCreate>
-		</RuleGroup>
+	</RuleGroup>
 
-		<RuleGroup name="" groupRelation="or">
+	<RuleGroup name="" groupRelation="or">
 			<FileCreate onmatch="exclude">
 				<!--SECTION: Microsoft-->
 				<Image condition="is">C:\Program Files (x86)\EMET 5.5\EMET_Service.exe</Image> <!--Microsoft:EMET: Writes to C:\Windows\AppPatch\-->
@@ -803,7 +803,7 @@
 				<TargetFilename condition="begin with">C:\$WINDOWS.~BT\Sources\</TargetFilename> <!-- Windows: Feature updates containing lots of .exe and .sys-->
 				<Image condition="begin with">C:\Windows\winsxs\amd64_microsoft-windows</Image> <!-- Windows: Windows update-->
 			</FileCreate>
-		</RuleGroup>
+	</RuleGroup>
 
 
 	<!--SYSMON EVENT ID 12 & 13 & 14 : REGISTRY MODIFICATION [RegistryEvent]-->
@@ -827,7 +827,7 @@
 								For example, most COM hijacking in CLSID's across the registry is covered by a single rule monitoring a InProcServer32 wildcard-->
 
 		<!--DATA: EventType, UtcTime, ProcessGuid, ProcessId, Image, TargetObject, Details (can't filter on), NewName (can't filter on)-->
-		<RuleGroup name="" groupRelation="or">
+	<RuleGroup name="" groupRelation="or">
 			<RegistryEvent onmatch="include">
 				<!--Autorun or Startups-->
 					<!--ADDITIONAL REFERENCE: [ http://www.ghacks.net/2016/06/04/windows-automatic-startup-locations/ ] -->
@@ -967,9 +967,9 @@
 				<!--Suspicious sources-->
 				<Image name="Suspicious,ImageBeginWithBackslash" condition="begin with">\</Image> <!--Devices and VSC shouldn't be executing changes | Credit: @SBousseaden @ionstorm @neu5ron @PerchedSystems [ https://twitter.com/SwiftOnSecurity/status/1133167323991486464 ] -->
 			</RegistryEvent>
-		</RuleGroup>
+	</RuleGroup>
 	
-		<RuleGroup name="" groupRelation="or">
+	<RuleGroup name="" groupRelation="or">
 			<RegistryEvent onmatch="exclude">
 			<!--COMMENT:	Remove low-information noise. Often these hide a procress recreating an empty key and do not hide the values created subsequently.-->
 			<!--NOTE:	A lot of noise can be removed by excluding CreateKey events, which are largely innocuous-->
@@ -1035,7 +1035,7 @@
 				<!--WINEVT publishers noise-->
 				<TargetObject condition="is">HKLM\Software\Microsoft\Windows\CurrentVersion\WINEVT\Publishers\{945a8954-c147-4acd-923f-40c45405a658}</TargetObject> <!--Windows update-->
 			</RegistryEvent>
-		</RuleGroup>
+	</RuleGroup>
 
 
 	<!--SYSMON EVENT ID 15 : ALTERNATE DATA STREAM CREATED [FileCreateStreamHash]-->
@@ -1047,7 +1047,7 @@
 		<!--NOTE: Other filesystem minifilters can make it appear to Sysmon that some files are being written twice. This is not a Sysmon issue, per Mark Russinovich.-->
 
 		<!--DATA: UtcTime, ProcessGuid, ProcessId, Image, TargetFilename, CreationUtcTime, Hash-->
-		<RuleGroup name="" groupRelation="or">
+	<RuleGroup name="" groupRelation="or">
 			<FileCreateStreamHash onmatch="include">
 				<TargetFilename condition="contains">Downloads</TargetFilename> <!--Downloaded files. Does not include "Run" files in IE-->
 				<TargetFilename condition="contains">Temp\7z</TargetFilename> <!--7zip extractions-->
@@ -1066,11 +1066,11 @@
 				<TargetFilename condition="end with">.vbe</TargetFilename> <!--VisualBasicScripting files-->
 				<TargetFilename condition="end with">.vbs</TargetFilename> <!--VisualBasicScripting files-->
 			</FileCreateStreamHash>
-		</RuleGroup>
-		<RuleGroup name="" groupRelation="or">
+	</RuleGroup>
+	<RuleGroup name="" groupRelation="or">
 			<FileCreateStreamHash onmatch="exclude">
 			</FileCreateStreamHash>
-		</RuleGroup>
+	</RuleGroup>
 	<!--SYSMON EVENT ID 16 : SYSMON CONFIGURATION CHANGE-->
 		<!--EVENT 16: "Sysmon config state changed"-->
 		<!--COMMENT:	This ONLY logs if the hash of the configuration changes. Running "sysmon.exe -c" with the current configuration will not be logged with Event 16-->
@@ -1086,7 +1086,7 @@
 		<!--ADDITIONAL REFERENCE: [ https://blog.cobaltstrike.com/2015/10/07/named-pipe-pivoting/ ] -->
 
 		<!--DATA: UtcTime, ProcessGuid, ProcessId, PipeName, Image-->
-		<RuleGroup name="" groupRelation="or">
+	<RuleGroup name="" groupRelation="or">
 			<PipeEvent onmatch="include">
 				<!--NOTE: Using incide with no rules means nothing in this section will be logged-->
 				<PipeName name="MitreRef=T1055,Technique=Process Injection" condition="contains">\isapi_http</PipeName><!-- Credits @Cyb3rops & @olafhartong-->
@@ -1105,8 +1105,8 @@
 				<PipeName name="MitreRef=T1055,Technique=Process Injection" condition="contains">\pcheap_reuse</PipeName><!-- Credits @Cyb3rops & @olafhartong -->
 				<PipeName condition="contains">\</PipeName><!--Include Everything else to mark above rules-->
 			</PipeEvent>
-		</RuleGroup>
-		<RuleGroup name="" groupRelation="or">	
+	</RuleGroup>
+	<RuleGroup name="" groupRelation="or">	
 			<PipeEvent onmatch="exclude">
 			<!--COMMENT: Exclude known-good pipe users-->
 					<!--ADDITIONAL REFERENCE: [ https://www.cobaltstrike.com/help-smb-beacon ] -->
@@ -1267,7 +1267,7 @@
 				<Image condition="end with">TNSLSNR.exe</Image>
 				<Image condition="contains">ShoreWare Server</Image>
 			</PipeEvent>
-		</RuleGroup>
+	</RuleGroup>
 	
 
 	<!--SYSMON EVENT ID 19 & 20 & 21 : WMI EVENT MONITORING [WmiEvent]-->
@@ -1279,11 +1279,11 @@
 		<!--ADDITIONAL REFERENCE: [ https://rawsec.lu/blog/posts/2017/Sep/19/sysmon-v610-vs-wmi-persistence/ ] -->
 
 		<!--DATA: EventType, UtcTime, Operation, User, Name, Type, Destination, Consumer, Filter-->
-		<RuleGroup name="" groupRelation="or">
+	<RuleGroup name="" groupRelation="or">
 			<WmiEvent onmatch="exclude">
 				<!--NOTE: Using exclude with no rules means everything will be logged-->
 			</WmiEvent>
-		</RuleGroup>
+	</RuleGroup>
 	
 
 	<!--SYSMON EVENT ID 22 : DNS QUERY [DnsQuery]-->
@@ -1322,7 +1322,7 @@
 		<!-- Rejected: .windows.net, customer content -->
 		<!-- Rejected: *github.com, customer content, including open-source malware components -->
 
-		<RuleGroup name="" groupRelation="or">
+	<RuleGroup name="" groupRelation="or">
 			<DnsQuery onmatch="exclude">
 				<!--Network noise-->
 				<QueryName condition="end with">.arpa.</QueryName> <!--Design decision to not log reverse DNS lookups. You will need to decide.-->
@@ -1514,7 +1514,7 @@
 				<QueryName condition="is">status.thawte.com</QueryName>
 				<QueryName condition="is">ocsp.int-x3.letsencrypt.org</QueryName>
 			</DnsQuery>
-		</RuleGroup>
+	</RuleGroup>
 	
 
 	<!--SYSMON EVENT ID 255 : ERROR-->
