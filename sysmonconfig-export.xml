@@ -222,7 +222,6 @@
 			<Hashes name="Alert=Gootkit Banker Malware!" condition="contains">1b60021baedc3f9201bcdb40e9b87f62</Hashes><!--Malware Traffic Internals: BlackTDS Leads to Gootkit Banking Malware Distribution: https://www.vkremez.com/2018/03/3-29-2018-malware-traffic-internals.html-->
 			<Hashes name="Alert=Gootkit Banker Malware!" condition="contains">c7c8d584758854bbe0d8e64ef53ae1a8</Hashes><!--Malware Traffic Internals: BlackTDS Leads to Gootkit Banking Malware Distribution: https://www.vkremez.com/2018/03/3-29-2018-malware-traffic-internals.html-->
 		</ProcessCreate>
-	
 		<ProcessCreate onmatch="exclude">
 			<!--SECTION: Microsoft Windows-->
 			<CommandLine condition="begin with"> "C:\Windows\system32\wermgr.exe" "-queuereporting_svc" </CommandLine> <!--Windows:Windows error reporting/telemetry-->
@@ -366,7 +365,6 @@
 			<!--SECTION: Google-->
 			<CommandLine condition="begin with">"C:\Program Files (x86)\Google\Chrome\Application\chrome.exe" --type=</CommandLine> <!--Google:Chrome: massive command-line arguments-->
 			<CommandLine condition="begin with">"C:\Program Files\Google\Chrome\Application\chrome.exe" --type=</CommandLine> <!--Google:Chrome: massive command-line arguments-->
-			
 		</ProcessCreate>
 	
 	
@@ -374,7 +372,6 @@
 		<!--COMMENT:	[ https://attack.mitre.org/wiki/Technique/T1099 ] -->
 
 		<!--DATA: UtcTime, ProcessGuid, ProcessId, Image, TargetFilename, CreationUtcTime, PreviousCreationUtcTime-->
-	<RuleGroup name="" groupRelation="or">
 		<FileCreateTime onmatch="include">
 			<Image name="T1099" condition="begin with">C:\Users</Image> <!--Look for timestomping in user area, usually nothing should be doing that here-->
 			<Image name="MitreRef=T1099,Technique=Timestomp,Tactic=Defense Evasion,Alert=Timestomp/File creation time retroactively changed!" condition="begin with">C:\ProgramData</Image> <!--Look for timestomping in user area-->
@@ -382,9 +379,8 @@
 			<TargetFilename name="T1099" condition="end with">.exe</TargetFilename> <!--Look for backdated executables anywhere-->
 			<Image name="T1099" condition="begin with">\Device\HarddiskVolumeShadowCopy</Image> <!--Nothing should be written here | Credit: @SBousseaden [ https://twitter.com/SBousseaden/status/1133030955407630336 ] -->
 		</FileCreateTime>
-	</RuleGroup>
 
-	<RuleGroup name="" groupRelation="or">
+	
 		<FileCreateTime onmatch="exclude">
 			<Image condition="image">OneDrive.exe</Image> <!--OneDrive constantly changes file times-->
 			<Image condition="image">C:\Windows\system32\backgroundTaskHost.exe</Image>
@@ -397,7 +393,6 @@
 			<Image condition="image">chrome.exe</Image> <!--Chrome constantly changes file times-->
 			<TargetFilename condition="contains">\NVIDIA\NvBackend\ApplicationOntology\</TargetFilename> <!--NVIDIA GeForce Experience Application Ontology, 1000's of events in user profile-->
 		</FileCreateTime>
-	</RuleGroup>
 
 	<!--SYSMON EVENT ID 3 : NETWORK CONNECTION INITIATED [NetworkConnect]-->
 		<!--COMMENT:	By default this configuration takes a very conservative approach to network logging, limited to only extremely high-signal events.-->
@@ -409,7 +404,6 @@
 		<!-- https://www.first.org/resources/papers/conf2017/APT-Log-Analysis-Tracking-Attack-Tools-by-Audit-Policy-and-Sysmon.pdf -->
 
 		<!--DATA: UtcTime, ProcessGuid, ProcessId, Image, User, Protocol, Initiated, SourceIsIpv6, SourceIp, SourceHostname, SourcePort, SourcePortName, DestinationIsIpV6, DestinationIp, DestinationHostname, DestinationPort, DestinationPortName-->
-	<RuleGroup name="" groupRelation="or">
 		<NetworkConnect onmatch="include">
 			<!--Suspicious sources for network-connecting binaries-->
 			<Image name="Usermode" condition="begin with">C:\Users</Image> <!--Tools downloaded by users can use other processes for networking, but this is a very valuable indicator.-->
@@ -521,9 +515,7 @@
 			<DestinationPort name="Tor" condition="is">9001</DestinationPort> <!--Tor protocol [ http://www.computerworlduk.com/tutorial/security/tor-enterprise-2016-blocking-malware-darknet-use-rogue-nodes-3633907/ ] -->
 			<DestinationPort name="Tor" condition="is">9030</DestinationPort> <!--Tor protocol [ http://www.computerworlduk.com/tutorial/security/tor-enterprise-2016-blocking-malware-darknet-use-rogue-nodes-3633907/ ] -->
 		</NetworkConnect>
-	</RuleGroup>
 
-	<RuleGroup name="" groupRelation="or">
 		<NetworkConnect onmatch="exclude">
 			<!--Alot of room to improve this exclude list JAC-->
 			<!--SECTION: Microsoft-->
@@ -536,7 +528,6 @@
 			<DestinationIp condition="is">127.0.0.1</DestinationIp> <!--Credit @ITProPaul-->
 			<DestinationIp condition="begin with">fe80:0:0:0</DestinationIp> <!--Credit @ITProPaul-->
 		</NetworkConnect>
-	</RuleGroup>
 
 	<!--SYSMON EVENT ID 4 : RESERVED FOR SYSMON SERVICE STATUS MESSAGES-->
 
@@ -547,7 +538,7 @@
 		<!--COMMENT:	Useful data in building infection timelines.-->
 
 		<!--DATA: UtcTime, ProcessGuid, ProcessId, Image-->
-	<RuleGroup name="" groupRelation="or">
+
 		<ProcessTerminate onmatch="include">
 			<Image condition="begin with">C:\Users</Image> <!--Process terminations by user binaries-->
 			<Image condition="begin with">C:\ProgramData</Image> <!--Process terminations by user binaries-->
@@ -556,12 +547,11 @@
 			<Image condition="end with">Sysmon.exe</Image> <!--Detect killing Sysmon, Credit: @vector_sec-->
 			<Image condition="end with">Sysmon64.exe</Image> <!--Detect killing Sysmon, Credit: @vector_sec-->
 		</ProcessTerminate>
-	</RuleGroup>
 
-	<RuleGroup name="" groupRelation="or">
+
 		<ProcessTerminate onmatch="exclude">
 		</ProcessTerminate>
-	</RuleGroup>
+	
 
 	<!--SYSMON EVENT ID 6 : DRIVER LOADED INTO KERNEL [DriverLoad]-->
 		<!--COMMENT:	Because drivers with bugs can be used to escalate to kernel permissions, be extremely selective
@@ -570,7 +560,6 @@
 		<!--TECHNICAL:	Sysmon will check the signing certificate revocation status of any driver you don't exclude.-->
 
 		<!--DATA: UtcTime, ImageLoaded, Hashes, Signed, Signature, SignatureStatus-->
-	<RuleGroup name="" groupRelation="or">
 		<DriverLoad onmatch="exclude">
 			<Signature condition="contains">microsoft</Signature> <!--Exclude signed Microsoft drivers-->
 			<Signature condition="contains">windows</Signature> <!--Exclude signed Microsoft drivers-->
@@ -579,7 +568,6 @@
 			<Signature condition="is">Microsoft Windows</Signature> <!--Exclude signed Microsoft drivers-->
 			<Signature condition="contains">Nvidia</Signature> <!--Exclude signed Nvidia drivers-->
 		</DriverLoad>
-	</RuleGroup>
 
 	<!--SYSMON EVENT ID 7 : DLL (IMAGE) LOADED BY PROCESS [ImageLoad]-->
 		<!--COMMENT:	Can cause high system load, disabled by default.-->
@@ -708,11 +696,11 @@
 		<!--COMMENT:	You will likely want to set this to a full capture on domain controllers, where no process should be doing raw reads.-->
 
 		<!--DATA: UtcTime, ProcessGuid, ProcessId, Image, Device-->
-	<RuleGroup name="" groupRelation="or">
+	
 		<RawAccessRead onmatch="include">
 			<!--NOTE: Using "include" with no rules means nothing in this section will be logged-->
 		</RawAccessRead>
-	</RuleGroup>
+	
 
 	<!--SYSMON EVENT ID 10 : INTER-PROCESS ACCESS [ProcessAccess]-->
 		<!--EVENT 10: "Process accessed"-->
@@ -720,11 +708,10 @@
 		<!--COMMENT:	Monitor for processes accessing other process' memory.-->
 
 		<!--DATA: UtcTime, SourceProcessGuid, SourceProcessId, SourceThreadId, SourceImage, TargetProcessGuid, TargetProcessId, TargetImage, GrantedAccess, CallTrace-->
-	<RuleGroup name="" groupRelation="or">
+	
 		<ProcessAccess onmatch="include">
 			<!--NOTE: Using "include" with no rules means nothing in this section will be logged-->
 		</ProcessAccess>
-	</RuleGroup>
 
 	<!--SYSMON EVENT ID 11 : FILE CREATED [FileCreate]-->
 		<!--EVENT 11: "File created"-->
@@ -732,7 +719,6 @@
 		<!--NOTE:	You may not see files detected by antivirus. Other filesystem minifilters, like antivirus, can act before Sysmon receives the alert a file was written.-->
 
 		<!--DATA: UtcTime, ProcessGuid, ProcessId, Image, TargetFilename, CreationUtcTime-->
-	<RuleGroup name="" groupRelation="or">
 		<FileCreate onmatch="include">
 			<TargetFilename name="T1023" condition="contains">\Start Menu</TargetFilename> <!--Windows: Startup links and shortcut modification [ https://attack.mitre.org/wiki/Technique/T1023 ] -->
 			<TargetFilename name="T1165" condition="contains">\Startup\</TargetFilename> <!--Microsoft:Changes to user's auto-launched files and shortcuts-->
@@ -785,9 +771,9 @@
 			<TargetFilename condition="end with">.ppt</TargetFilename> <!--Legacy Office files are often used for attacks-->
 			<TargetFilename condition="end with">.rtf</TargetFilename> <!--RTF files often 0day malware vectors when opened by Office-->
 		</FileCreate>
-	</RuleGroup>
 
-	<RuleGroup name="" groupRelation="or">
+
+
 		<FileCreate onmatch="exclude">
 			<!--SECTION: Microsoft-->
 			<Image condition="is">C:\Program Files (x86)\EMET 5.5\EMET_Service.exe</Image> <!--Microsoft:EMET: Writes to C:\Windows\AppPatch\-->
@@ -805,7 +791,7 @@
 			<TargetFilename condition="begin with">C:\$WINDOWS.~BT\Sources\</TargetFilename> <!-- Windows: Feature updates containing lots of .exe and .sys-->
 			<Image condition="begin with">C:\Windows\winsxs\amd64_microsoft-windows</Image> <!-- Windows: Windows update-->
 		</FileCreate>
-	</RuleGroup>
+
 
 	<!--SYSMON EVENT ID 12 & 13 & 14 : REGISTRY MODIFICATION [RegistryEvent]-->
 		<!--EVENT 12: "Registry object added or deleted"-->
@@ -828,7 +814,7 @@
 								For example, most COM hijacking in CLSID's across the registry is covered by a single rule monitoring a InProcServer32 wildcard-->
 
 		<!--DATA: EventType, UtcTime, ProcessGuid, ProcessId, Image, TargetObject, Details (can't filter on), NewName (can't filter on)-->
-	<RuleGroup name="" groupRelation="or">
+	
 		<RegistryEvent onmatch="include">
 			<!--Autorun or Startups-->
 				<!--ADDITIONAL REFERENCE: [ http://www.ghacks.net/2016/06/04/windows-automatic-startup-locations/ ] -->
@@ -968,9 +954,8 @@
 			<!--Suspicious sources-->
 			<Image name="Suspicious,ImageBeginWithBackslash" condition="begin with">\</Image> <!--Devices and VSC shouldn't be executing changes | Credit: @SBousseaden @ionstorm @neu5ron @PerchedSystems [ https://twitter.com/SwiftOnSecurity/status/1133167323991486464 ] -->
 		</RegistryEvent>
-	</RuleGroup>
+	
 
-	<RuleGroup name="" groupRelation="or">
 		<RegistryEvent onmatch="exclude">
 		<!--COMMENT:	Remove low-information noise. Often these hide a procress recreating an empty key and do not hide the values created subsequently.-->
 		<!--NOTE:	A lot of noise can be removed by excluding CreateKey events, which are largely innocuous-->
@@ -1036,7 +1021,7 @@
 			<!--WINEVT publishers noise-->
 			<TargetObject condition="is">HKLM\Software\Microsoft\Windows\CurrentVersion\WINEVT\Publishers\{945a8954-c147-4acd-923f-40c45405a658}</TargetObject> <!--Windows update-->
 		</RegistryEvent>
-	</RuleGroup>
+
 
 	<!--SYSMON EVENT ID 15 : ALTERNATE DATA STREAM CREATED [FileCreateStreamHash]-->
 		<!--EVENT 15: "File stream created"-->
